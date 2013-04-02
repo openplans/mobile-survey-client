@@ -50,6 +50,10 @@ a.address {
   border-bottom: 1px solid gray;
 }
 
+#mock-problems-note {
+  display: none;
+}
+
 hr {
   margin-left: -20px;
   margin-right: -20px;

@@ -25,11 +25,11 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
+<!--          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">-->
+<!--            <span class="icon-bar"></span>-->
+<!--            <span class="icon-bar"></span>-->
+<!--            <span class="icon-bar"></span>-->
+<!--          </a>-->
 
           <a href="place-list.html" class="btn btn-navbar btn-navbar-left btn-full-icon">
             <span class="icon-chevron-left icon-white"></span>
@@ -37,30 +37,30 @@
 
           <a class="brand" href="#">Surveyor</a>
 
-          <div class="nav-collapse collapse">
-            <ul class="nav">
-              <li class="active"><a href="#">Nearby Places</a></li>
-              <li><a href="#about">About</a></li>
-              <li><a href="#contact">Contact</a></li>
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li><a href="#">Action</a></li>
-                  <li><a href="#">Another action</a></li>
-                  <li><a href="#">Something else here</a></li>
-                  <li class="divider"></li>
-                  <li class="nav-header">Nav header</li>
-                  <li><a href="#">Separated link</a></li>
-                  <li><a href="#">One more separated link</a></li>
-                </ul>
-              </li>
-            </ul>
-            <form class="navbar-form pull-right">
-              <input class="span2" type="text" placeholder="Email">
-              <input class="span2" type="password" placeholder="Password">
-              <button type="submit" class="btn">Sign in</button>
-            </form>
-          </div><!--/.nav-collapse -->
+<!--          <div class="nav-collapse collapse">-->
+<!--            <ul class="nav">-->
+<!--              <li class="active"><a href="#">Nearby Places</a></li>-->
+<!--              <li><a href="#about">About</a></li>-->
+<!--              <li><a href="#contact">Contact</a></li>-->
+<!--              <li class="dropdown">-->
+<!--                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>-->
+<!--                <ul class="dropdown-menu">-->
+<!--                  <li><a href="#">Action</a></li>-->
+<!--                  <li><a href="#">Another action</a></li>-->
+<!--                  <li><a href="#">Something else here</a></li>-->
+<!--                  <li class="divider"></li>-->
+<!--                  <li class="nav-header">Nav header</li>-->
+<!--                  <li><a href="#">Separated link</a></li>-->
+<!--                  <li><a href="#">One more separated link</a></li>-->
+<!--                </ul>-->
+<!--              </li>-->
+<!--            </ul>-->
+<!--            <form class="navbar-form pull-right">-->
+<!--              <input class="span2" type="text" placeholder="Email">-->
+<!--              <input class="span2" type="password" placeholder="Password">-->
+<!--              <button type="submit" class="btn">Sign in</button>-->
+<!--            </form>-->
+<!--          </div><!--/.nav-collapse -->-->
         </div>
       </div>
     </div><!--/.navbar-->
@@ -75,10 +75,10 @@
             <legend>148 Lafayette St.</legend>
 
             <label>Business name:</label>
-            <input type="text">
+            <input type="text" value="OpenPlans">
 
             <label>Contact name:</label>
-            <input type="text">
+            <input type="text" value="Ellen McDermott">
 
             <label>Phone number:</label>
             <input type="text" placeholder="(___) ___-____">
@@ -104,12 +104,24 @@
             <label class="checkbox"><input type="checkbox"> African American</label>
             <label class="checkbox"><input type="checkbox"> Hispanic</label>
             <label class="checkbox"><input type="checkbox"> Asian</label>
-
-            <hr>
-
-            <button type="submit" class="btn">Discard</button>
-            <button type="submit" class="btn btn-primary">Save</button>
           </fieldset>
+
+          <hr>
+
+          <fieldset>
+            <legend>Other Information</legend>
+
+            <label>Your name:</label>
+            <input type="text" value="Frank">
+
+            <label class="checkbox">Are there any issues with this listing? <input id="mock-problems-check" type="checkbox"></label>
+            <textarea id="mock-problems-note" placeholder="Note issues with the listing here."></textarea>
+          </fieldset>
+
+          <hr>
+
+          <button type="button" class="btn" id="mock-discard-button">Discard</button>
+          <button type="submit" class="btn btn-primary">Save</button>
         </form>
       </div>
 
@@ -125,7 +137,7 @@
     <script>
       $(function() {
 
-        var map = L.map('top-map').setView([51.505, -0.09], 13);
+        var map = L.map('top-map').setView([51.505, -0.09], 14);
 
         L.tileLayer('http://{s}.tile.mapbox.com/v3/openplans.map-dmar86ym/{z}/{x}/{y}.png', {
           attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
