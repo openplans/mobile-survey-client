@@ -104,12 +104,24 @@
             <label class="checkbox"><input type="checkbox"> African American</label>
             <label class="checkbox"><input type="checkbox"> Hispanic</label>
             <label class="checkbox"><input type="checkbox"> Asian</label>
-
-            <hr>
-
-            <button type="submit" class="btn">Discard</button>
-            <button type="submit" class="btn btn-primary">Save</button>
           </fieldset>
+
+          <hr>
+
+          <fieldset>
+            <legend>Other Information</legend>
+
+            <label>Your name:</label>
+            <input type="text" value="Frank">
+
+            <label class="checkbox">Are there any issues with this listing? <input id="mock-problems-check" type="checkbox"></label>
+            <textarea id="mock-problems-note" placeholder="Note issues with the listing here."></textarea>
+          </fieldset>
+
+          <hr>
+
+          <button type="button" class="btn" id="mock-discard-button">Discard</button>
+          <button type="submit" class="btn btn-primary">Save</button>
         </form>
       </div>
 
