@@ -24,6 +24,7 @@ a.address {
 .more-places {
   text-align: center;
   color: silver;
+  margin-bottom: 1em;
 }
 
 .btn-navbar.btn-navbar-left {
