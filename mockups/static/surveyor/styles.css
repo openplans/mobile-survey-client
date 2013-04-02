@@ -28,13 +28,14 @@ a.address {
 
 .btn-navbar.btn-navbar-left {
   float: left;
+}
 
+.btn-navbar.btn-full-icon {
   /* We're using full-size icons in here, to the
    * btn-navbar padding of 7px vertically is too
    * big.
    */
-  padding-top: 3.5px;
-  padding-bottom: 3.5px;
+  padding: 3.5px 12px;
 }
 
 #top-map {
@@ -51,6 +52,14 @@ a.address {
 hr {
   margin-left: -20px;
   margin-right: -20px;
+}
+
+body.splash {
+  padding: 0;
+}
+
+body.splash .navbar {
+  margin: 0;
 }
 
 @media (min-width: 979px) {
