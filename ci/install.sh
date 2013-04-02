@@ -10,4 +10,4 @@ sudo pip install -r requirements.txt
 cp src/project/local_settings.py.template src/project/local_settings.py
 
 # Install Jasmine dependencies
-bundle install --gemfile="src/shareabouts_client/jasmine/Gemfile"
+bundle install --gemfile="src/surveyor/jasmine/Gemfile"

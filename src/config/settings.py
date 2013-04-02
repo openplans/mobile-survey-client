@@ -1,4 +1,4 @@
-# Django settings for project shareabouts_client.
+# Django settings for project surveyor.
 import os.path
 
 HERE = os.path.abspath(os.path.join(os.path.dirname(__file__)))
@@ -14,7 +14,7 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-    
+
         # Sometimes, you don't need a database for a shareabouts client, but
         # Django still requires a databse setting.  For this case, we can just
         # use the dummy backend.
@@ -109,7 +109,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 # session cookie.
 SESSION_COOKIE_NAME = 'sa-client-session'
 
-ROOT_URLCONF = 'shareabouts_client.urls'
+ROOT_URLCONF = 'surveyor.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'config.wsgi.application'
@@ -137,12 +137,12 @@ INSTALLED_APPS = (
     'compressor',
 
     # Project apps
-    'shareabouts_client',
+    'surveyor',
     'proxy',
 )
 
 # Use a test runner that does not use a database.
-TEST_RUNNER = 'shareabouts_client.test_runner.DatabaselessTestSuiteRunner'
+TEST_RUNNER = 'surveyor.test_runner.DatabaselessTestSuiteRunner'
 
 # Shareabouts flavor config
 SHAREABOUTS = {
@@ -208,4 +208,3 @@ if os.path.exists(LOCAL_SETTINGS_FILE):
     # By doing this instead of import, local_settings.py can refer to
     # local variables from settings.py without circular imports.
     execfile(LOCAL_SETTINGS_FILE)
-

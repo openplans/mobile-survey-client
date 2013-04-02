@@ -8,8 +8,8 @@ from . import views
 
 urlpatterns = staticfiles_urlpatterns() + patterns('',
     # Examples:
-    # url(r'^$', 'shareabouts_client.views.home', name='home'),
-    # url(r'^shareabouts_client/', include('shareabouts_client.foo.urls')),
+    # url(r'^$', 'surveyor.views.home', name='home'),
+    # url(r'^surveyor/', include('surveyor.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
