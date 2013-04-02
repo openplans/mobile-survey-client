@@ -1,0 +1,61 @@
+.address,
+.more-places {
+  font-size: 18px;
+  display: block;
+}
+
+.last-survey {
+  display: block;
+  font-size: 12px;
+}
+
+a.address {
+  color: inherit;
+}
+
+.address p {
+  margin: 0px;
+}
+
+.address:hover {
+  cursor: pointer;
+}
+
+.more-places {
+  text-align: center;
+  color: silver;
+}
+
+.btn-navbar.btn-navbar-left {
+  float: left;
+
+  /* We're using full-size icons in here, to the
+   * btn-navbar padding of 7px vertically is too
+   * big.
+   */
+  padding-top: 3.5px;
+  padding-bottom: 3.5px;
+}
+
+#top-map {
+  height: 100px;
+
+  margin-left: -20px;
+  margin-right: -20px;
+  margin-top: -20px;
+  margin-bottom: 20px;
+
+  border-bottom: 1px solid gray;
+}
+
+hr {
+  margin-left: -20px;
+  margin-right: -20px;
+}
+
+@media (min-width: 979px) {
+  body {
+    padding-top: 60px;
+    padding-bottom: 40px;
+  }
+}
