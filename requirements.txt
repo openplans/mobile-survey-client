@@ -4,8 +4,7 @@ django
 gunicorn
 
 # Templates
-django-jstemplate>=1.0.3
-django_compressor
+django-jstemplate>=1.2.0
 
 # Web interface helpers
 django-proxy
