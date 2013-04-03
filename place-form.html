@@ -157,14 +157,14 @@
     <script>
       $(function() {
 
-        var map = L.map('top-map').setView([51.505, -0.09], 14);
+        var map = L.map('top-map').setView([40.7275, -73.9812], 15);
 
         L.tileLayer('http://{s}.tile.mapbox.com/v3/openplans.map-dmar86ym/{z}/{x}/{y}.png', {
           attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
           maxZoom: 18
         }).addTo(map);
 
-        L.polygon([[51.504, -0.09],[51.505, -0.09],[51.505, -0.08],[51.504, -0.08],[51.504, -0.09]], 50, {
+        L.polygon([[40.7280, -73.9812],[40.7280, -73.9822],[40.7275, -73.9822],[40.7275, -73.9812]], 50, {
             color: 'blue',
             fillColor: 'blue',
             fillOpacity: 0.5
