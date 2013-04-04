@@ -37,6 +37,9 @@
 
   <script>
     (function(S) {
+
+      S.config = {{ config|as_json }};
+
       // Initialise the templates
       var placeListSource = $('#place-list-tpl').html(),
           placeFormSource = $('#place-form-tpl').html(),

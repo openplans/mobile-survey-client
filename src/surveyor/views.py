@@ -1,7 +1,6 @@
 import json
-import logging
 import os
-import time
+from config.shareabouts_config import get_shareabouts_config
 from django.shortcuts import render
 from django.conf import settings
 from django.utils.timezone import now
@@ -19,8 +18,13 @@ def make_resource_uri(resource, root):
 @ensure_csrf_cookie
 def index(request):
 
+    # Load app config settings
+    config = get_shareabouts_config(settings.SHAREABOUTS.get('CONFIG'))
+
     # Pull in any extra context values
     context = settings.SHAREABOUTS.get('CONTEXT', {})
+    context['config'] = config.data
+
     return render(request, 'index.html', context)
 
 
