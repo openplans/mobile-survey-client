@@ -14,8 +14,22 @@
 {% block content %}
   {% handlebarsjs '(.*)' %}
 
-  <div id="content" class="container">
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <button class="btn btn-navbar btn-navbar-left btn-full-icon">
+        <span class="icon-screenshot icon-white"></span>
+      </button>
+
+      <a class="brand" href="#">Surveyor</a>
+    </div>
   </div>
+</div><!--/.navbar-->
+
+<div class="container">
+  <div id="top-map"></div>
+  <div id="content"></div>
+</div> <!-- /container -->
 {% endblock content %}
 
 {% block load_late %}
@@ -23,7 +37,6 @@
 
   <script>
     (function(S) {
-
       // Initialise the templates
       var placeListSource = $('#place-list-tpl').html(),
           placeFormSource = $('#place-form-tpl').html(),
@@ -45,7 +58,6 @@
         template: S.placeListTemplate,
         el: '#content'
       });
-
     }(Surveyor));
 
     Backbone.history.start({pushState: true});
