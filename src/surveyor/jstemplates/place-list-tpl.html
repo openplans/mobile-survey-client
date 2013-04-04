@@ -1,0 +1,28 @@
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <button class="btn btn-navbar btn-navbar-left btn-full-icon">
+        <span class="icon-screenshot icon-white"></span>
+      </button>
+
+      <a class="brand" href="#">Surveyor</a>
+    </div>
+  </div>
+</div><!--/.navbar-->
+
+<div class="container">
+
+  <div id="top-map"></div>
+
+  <div class="place-list">
+
+    {{#each places }}
+      {{> place-item-tpl }}
+    {{/each}}
+
+    <div class="more-places row">
+      <span class="span6">More...</span>
+    </div>
+  </div>
+
+</div> <!-- /container -->

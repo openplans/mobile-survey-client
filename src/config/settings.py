@@ -80,7 +80,6 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
-    'compressor.finders.CompressorFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -134,12 +133,13 @@ INSTALLED_APPS = (
 
     # 3rd-party reusaple apps
     'jstemplate',
-    'compressor',
 
     # Project apps
     'surveyor',
     'proxy',
 )
+
+INTERNAL_IPS = ('127.0.0.1',)
 
 # Use a test runner that does not use a database.
 TEST_RUNNER = 'surveyor.test_runner.DatabaselessTestSuiteRunner'

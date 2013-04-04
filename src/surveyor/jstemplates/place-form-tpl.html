@@ -1,0 +1,94 @@
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <a href="place-list.html" class="btn btn-navbar btn-navbar-left btn-full-icon" id="mock-back-button">
+        <span class="icon-chevron-left icon-white"></span>
+      </a>
+
+      <a class="brand" href="#">Surveyor</a>
+    </div>
+  </div>
+</div><!--/.navbar-->
+
+<div class="container">
+
+  <div id="top-map"></div>
+
+  <div class="address-list">
+
+    <form class="place-form">
+      <fieldset>
+        <legend>148 Lafayette St.</legend>
+
+        <label>Business name:</label>
+        <input type="text" value="OpenPlans">
+
+        <label>Contact name:</label>
+        <input type="text" value="Ellen McDermott">
+
+        <label>Phone number:</label>
+        <input type="text" placeholder="(___) ___-____">
+
+        <label>Fax number:</label>
+        <input type="text" placeholder="(___) ___-____">
+
+        <hr>
+
+        <label>What kind of business is it?</label>
+        <select>
+          <option>Retail</option>
+          <option>Bar</option>
+        </select>
+
+        <label>What is sold?</label>
+        <input type="text">
+
+        <hr>
+
+        <label>Ethnicity</label>
+        <label class="checkbox"><input type="checkbox"> Caucasian</label>
+        <label class="checkbox"><input type="checkbox"> African American</label>
+        <label class="checkbox"><input type="checkbox"> Hispanic</label>
+        <label class="checkbox"><input type="checkbox"> Asian</label>
+      </fieldset>
+
+      <hr>
+
+      <fieldset>
+        <legend>Other Information</legend>
+
+        <label>Your name:</label>
+        <input type="text" value="Frank">
+
+        <label class="checkbox">Are there any issues with this listing? <input id="mock-problems-check" type="checkbox"></label>
+        <textarea id="mock-problems-note" placeholder="Note issues with the listing here."></textarea>
+      </fieldset>
+
+      <hr>
+
+      <button type="button" class="btn" id="mock-discard-button">Discard</button>
+      <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+  </div>
+
+</div> <!-- /container -->
+
+<div class="modal hide fade" id="discard-confirmation">
+  <div class="modal-body">
+    <p>You have made changes. Are you sure you want to discard them?</p>
+  </div>
+  <div class="modal-footer">
+    <a href="place-list.html" class="btn">Yes</a>
+    <a href="#" class="btn btn-primary no-op">No</a>
+  </div>
+</div>
+
+<div class="modal hide fade" id="save-changes-prompt">
+  <div class="modal-body">
+    <p>You have made changes. Do you want to save them before leaving?</p>
+  </div>
+  <div class="modal-footer">
+    <a href="place-list.html" class="btn">No, discard</a>
+    <a href="place-list.html" class="btn btn-primary">Yes, save</a>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+<div class="place place-{{ id }} row">
+  <div class="span6">
+    <a href="place-form.html" class="address">{{ address }}</a>
+    <span class="last-survey">
+      {{#if has_been_surveyed }}
+        {{#_}}Last surveyed <time datetime="{{ updated_datetime }}">{{ updated_datetime }}</time> by <a href="#">{{ updater_name }}</a>{{/_}}
+      {{^}}
+        {{#_}}Never been surveyed{{/_}}
+      {{/if}}
+    </span>
+  </div>
+</div>
+
+<hr>

@@ -3,7 +3,6 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 SHAREABOUTS = {
-  'DATASET_ROOT': 'http://api.shareabouts.org/api/v1/datasets/demo-user/demo-data/',
+  'DATASET_ROOT': 'http://api.shareabouts.org/api/v1/openplans/datasets/survey-test/',
   'DATASET_KEY': 'abc123',
 }
-
