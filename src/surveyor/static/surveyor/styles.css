@@ -67,6 +67,26 @@ body.splash .navbar {
   margin: 0;
 }
 
+.leaflet-control-locate a {
+  border-radius: 4px;
+  font: bold 13px/18px Tahoma, Verdana, sans-serif;
+}
+
+.leaflet-control-locate a div {
+  /* Safari */
+  -webkit-transform: rotate(-45deg);
+
+  /* Firefox */
+  -moz-transform: rotate(-45deg);
+
+  /* IE */
+  -ms-transform: rotate(-45deg);
+
+  /* Opera */
+  -o-transform: rotate(-45deg);
+}
+
+
 @media (min-width: 979px) {
   body {
     padding-top: 60px;

@@ -61,6 +61,12 @@
         template: S.placeListTemplate,
         el: '#content'
       });
+
+      S.mapView = new S.MapView({
+        el: '#top-map',
+        mapConfig: S.config.map
+      });
+
     }(Surveyor));
 
     Backbone.history.start({pushState: true});
