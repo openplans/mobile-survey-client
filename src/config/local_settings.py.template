@@ -1,3 +1,5 @@
+import os.path
+
 TIME_ZONE = 'America/New_York'
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -5,4 +7,5 @@ TEMPLATE_DEBUG = DEBUG
 SHAREABOUTS = {
   'DATASET_ROOT': 'http://api.shareabouts.org/api/v1/openplans/datasets/survey-test/',
   'DATASET_KEY': 'abc123',
+  'CONFIG': os.path.dirname(__file__),
 }
