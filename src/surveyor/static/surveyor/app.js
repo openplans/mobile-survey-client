@@ -11,10 +11,24 @@ var Surveyor = Surveyor || {};
       ':placeId': 'placeForm'
     },
 
-    initialize: function(options) {
-      this.$content = $(options['content']);
+    placeList: function() {
+      console.log('At the list');
+      S.contentView.showSpinner();
+
+      if (S.placeCollection.size() > 0) {
+        S.placeListView.render();
+        S.contentView.showView(S.placeListView);
+      }
+      // S.placeCollection.fetch({reset: true});
     },
 
+    placeForm: function(placeId) {
+      console.log('At the form for ' + placeId);
+      // S.placeFormViews[placeId].render();
+    }
+  });
+
+  S.ContentView = Backbone.View.extend({
     showSpinner: function() {
       var opts = {
             lines: 13, // The number of lines to draw
@@ -34,23 +48,11 @@ var Surveyor = Surveyor || {};
             top: 'auto', // Top position relative to parent in px
             left: 'auto' // Left position relative to parent in px
           },
-          spinner = new Spinner(opts).spin(this.$content[0]);
+          spinner = new Spinner(opts).spin(this.el);
     },
 
-    placeList: function() {
-      console.log('At the list');
-      this.showSpinner();
-
-      if (S.placeCollection.size() > 0) {
-        S.placeListView.render();
-        $content.html(S.placeListView.el);
-      }
-      // S.placeCollection.fetch({reset: true});
-    },
-
-    placeForm: function(placeId) {
-      console.log('At the form for ' + placeId);
-      // S.placeFormViews[placeId].render();
+    showView: function(view) {
+      this.$el.html(view.el);
     }
   });
 
@@ -158,6 +160,9 @@ var Surveyor = Surveyor || {};
             reset: true,
             data: {
               near: evt.latlng.lat+','+evt.latlng.lng
+            },
+            success: function() {
+              S.contentView.showView(S.placeListView);
             }
           });
 

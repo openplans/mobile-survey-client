@@ -59,6 +59,10 @@
       S.placeListView = new S.PlaceListView({
         collection: S.placeCollection,
         template: S.placeListTemplate,
+      });
+
+      // Create the content managing view
+      S.contentView = new S.ContentView({
         el: '#content'
       });
 
