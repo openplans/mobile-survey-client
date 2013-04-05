@@ -86,6 +86,9 @@ body.splash .navbar {
   -o-transform: rotate(-45deg);
 }
 
+.spinner {
+  margin-top: 120px;
+}
 
 @media (min-width: 979px) {
   body {

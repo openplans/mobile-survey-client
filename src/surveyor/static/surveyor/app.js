@@ -13,12 +13,15 @@ var Surveyor = Surveyor || {};
 
     placeList: function() {
       console.log('At the list');
-      S.placeCollection.fetch({reset: true});
+      if (S.placeCollection.size() > 0) {
+        S.placeListView.render();
+      }
+      // S.placeCollection.fetch({reset: true});
     },
 
     placeForm: function(placeId) {
       console.log('At the form for ' + placeId);
-      S.placeFormViews[placeId].render();
+      // S.placeFormViews[placeId].render();
     }
   });
 
@@ -38,7 +41,6 @@ var Surveyor = Surveyor || {};
     },
 
     render: function() {
-      console.log('render called');
       var data = this.collection.toJSON(),
           html = this.template({'places': data});
       this.$el.html(html);
@@ -88,6 +90,15 @@ var Surveyor = Surveyor || {};
 
       var onLocationError = function(evt) {
         var message;
+
+        // Fetch new data near this place
+        self.collection.fetch({
+          reset: true,
+          data: {
+            near: self.options.mapConfig.center.lat+','+self.options.mapConfig.center.lng
+          }
+        });
+
         switch (evt.code) {
           // Unknown
           case 0:
@@ -110,14 +121,20 @@ var Surveyor = Surveyor || {};
       };
 
       var onLocationFound = function(evt) {
-        var msg;
+        var msg, radius;
 
-        console.log(evt);
         if(!self.map.options.maxBounds || self.map.options.maxBounds.contains(evt.latlng)) {
+          // Fetch new data near this place
+          self.collection.fetch({
+            reset: true,
+            data: {
+              near: evt.latlng.lat+','+evt.latlng.lng
+            }
+          });
+
           self.map.fitBounds(evt.bounds);
 
-          var radius = evt.accuracy / 2;
-
+          radius = evt.accuracy / 2;
           currentLocationMarkers.clearLayers();
 
           currentLocationMarkers.addLayer(L.circleMarker(evt.latlng, {
@@ -132,7 +149,6 @@ var Surveyor = Surveyor || {};
             color: '#06f',
             fillOpacity: 0.1
           }));
-
         } else {
           msg = 'It looks like you\'re not in a place where we\'re collecting ' +
             'data. I\'m going to leave the map where it is, okay?';
