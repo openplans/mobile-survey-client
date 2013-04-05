@@ -1,0 +1,69 @@
+# Settings for the app
+app:
+  # HTML Title
+  title: Shareabouts
+  # Header name
+  name: Shareabouts
+  # Meta description that will show up in Google search results
+  meta_description: _(Shareabouts is a mapping tool to gather crowd sourced public input. Use it to collect suggested locations and comments in a social, engaging process.)
+
+# Settings for map and layer configs
+map:
+  geolocation_enabled: true
+  geolocation_onload: true
+  options:
+    center:
+      lat: 39.9523524
+      lng: -75.1636075
+    zoom: 14
+    minZoom: 10
+    maxZoom: 17
+  base_layer:
+    url: http://{s}.tiles.mapbox.com/v3/openplans.map-dmar86ym/{z}/{x}/{y}.png
+    attribution: '&copy; OpenStreetMap contributors, CC-BY-SA. <a href="http://mapbox.com/about/maps" target="_blank">Terms &amp; Feedback</a>'
+  layers: []
+
+place:
+  items:
+    - prompt: _(Location Name)
+      type: text
+      name: name
+      attrs:
+        - key: placeholder
+          value: _(Location Name)
+        - key: size
+          value: 30
+    - prompt: _(Location Type)
+      type: select
+      options:
+        - label: _(Landmark)
+          value: landmark
+        - label: _(Park)
+          value: park
+        - label: _(School)
+          value: school
+      name: location_type
+    - prompt: _(Image)
+      inputfile_label: _(Add an Image)
+      type: file
+      name: my_image
+      optional: true
+      attrs:
+        - key: accept
+          value: image/*
+    - prompt: _(Your Name)
+      type: text
+      name: submitter_name
+      optional: true
+      attrs:
+        - key: placeholder
+          value: _(Name)
+        - key: size
+          value: 30
+    - prompt: _(Description)
+      type: textarea
+      name: description
+      optional: true
+      attrs:
+        - key: placeholder
+          value: _(Description...)

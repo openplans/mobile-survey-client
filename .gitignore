@@ -27,7 +27,6 @@ env/
 
 # Local project settings
 src/config/local_settings.py
-src/config/config.yml
 
 # sqlite database
 *.db
