@@ -126,7 +126,7 @@ var Surveyor = Surveyor || {};
         self.collection.fetch({
           reset: true,
           data: {
-            near: self.options.mapConfig.center.lat+','+self.options.mapConfig.center.lng
+            near: self.options.mapConfig.options.center.lat+','+self.options.mapConfig.options.center.lng
           }
         });
 
