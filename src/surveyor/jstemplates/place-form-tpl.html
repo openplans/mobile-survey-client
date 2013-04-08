@@ -2,31 +2,34 @@
 
   <form class="place-form">
     <fieldset>
-      <legend>148 Lafayette St.</legend>
+      <legend>{{ place.address }}</legend>
 
       <input type="hidden" name="visible" value="on">
 
       {{#each survey_config.items}}
 
-        <div class="survey-field survey-field-{{ name }}">
+        <div class="survey-field survey-field-{{ name }}"{{#condition}} data-condition-field="{{ field }}" data-condition-value="{{ value }}"{{/condition}}>
+
           <label class="survey-label survey-label-{{ name }}" for="survey-{{ name }}">
             {{#_}}{{ prompt }}{{# optional }} (optional){{/ optional }}{{/_}}
           </label>
 
           <div class="survey-widgets survey-widgets-{{ name }}">
             {{#isInput}}
-            <input id="survey-{{ name }}" name="{{ name }}" type="{{ type }}" {{#attrs}} {{ key }}="{{ value }}"{{/attrs}}>
+            <input id="survey-{{ name }}" name="{{ name }}" type="{{ type }}" {{#attrs}} {{ key }}="{{ value }}"{{/attrs}} value="{{value}}">
             {{/isInput}}
 
             {{#isTextarea}}
-            <textarea id="survey-{{ name }}" name="{{ name }}"{{#attrs}} {{ key }}="{{ value }}"{{/attrs}}></textarea>
+            <textarea id="survey-{{ name }}" name="{{ name }}"{{#attrs}} {{ key }}="{{ value }}"{{/attrs}} value="{{value}}"></textarea>
             {{/isTextarea}}
 
             {{#isSelect}}
             <select id="survey-{{ name }}" name="{{ name }}" type="{{ type }}" {{#attrs}} {{ key }}="{{ value }}"{{/attrs}}>
-              {{# options }}
+              {{#select value}}
+              {{#options}}
                 <option value="{{value}}">{{label}}</option>
-              {{/ options }}
+              {{/options}}
+              {{/select}}
             </select>
             {{/isSelect}}
 
@@ -47,14 +50,11 @@
 
     </fieldset>
 
+    <hr>
+
     <fieldset>
-      <legend>Other Information</legend>
-
       <label>Your name:</label>
-      <input type="text" value="Frank">
-
-      <label class="checkbox">Are there any issues with this listing? <input id="mock-problems-check" type="checkbox"></label>
-      <textarea id="mock-problems-note" placeholder="Note issues with the listing here."></textarea>
+      <input type="text" name="submitter_name">
     </fieldset>
 
     <hr>

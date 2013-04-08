@@ -59,6 +59,9 @@ var Surveyor = Surveyor || {};
       S.placeCollection.add({id: placeId});
       place = S.placeCollection.get(placeId);
       place.fetch({
+        data: {
+          include_submissions: true
+        },
         success: function() {
           createPlaceFormView();
         }
@@ -125,10 +128,89 @@ var Surveyor = Surveyor || {};
       this.template = this.options.template;
     },
 
+    events: {
+      'change input, textarea, select': 'updateConditionalFields',
+      'submit form': 'saveSurvey'
+    },
+
+    updateConditionalFields: function() {
+      var self = this;
+
+      // Go through each of the fields for this survey. If one of them has a
+      // condition-field data attribute, then only show it if the value of that
+      // field is equal to the condition-value data attribute.
+      self.$('.survey-field').each(function(i, field) {
+        var $field = $(field),
+            conditionField = $field.attr('data-condition-field'),
+            conditionValue = $field.attr('data-condition-value'),
+            $conditionField;
+
+        if (conditionField) {
+          // Get the field that this field depends on
+          $conditionField = self.$('[name="' + conditionField + '"]');
+
+          switch ($conditionField.attr('type')) {
+            // Checkboxes are special. Their value is always 'on', so check
+            // whether it's checked instead.
+            case 'checkbox':
+              if (($conditionField.is(':checked') && conditionValue === 'checked') ||
+                  ($conditionField.is(':not(:checked)') && conditionValue === 'unchecked')) {
+                $field.show();
+              } else {
+                $field.hide();
+              }
+              break;
+
+            // For everything else, just check that the value matches.
+            default:
+              if ($conditionField.val() === conditionValue) {
+                $field.show();
+              } else {
+                $field.hide();
+              }
+          }
+        }
+      });
+    },
+
+    getAttrs: function() {
+      var attrs = {};
+
+      // Get attributes from the form
+      _.each(this.$('form').serializeArray(), function(item, i) {
+        attrs[item.name] = item.value;
+      });
+
+      return attrs;
+    },
+
+    saveSurvey: function(evt) {
+      evt.preventDefault();
+
+      var attrs = this.getAttrs(),
+          survey = this.model.responseCollection.first();
+
+      if (survey) {
+        survey.save(attrs);
+      } else {
+        this.model.responseCollection.create(attrs);
+      }
+    },
+
     render: function() {
-      var data = this.model.toJSON(),
-          html = this.template(_.extend(data, {survey_config: S.config.survey}));
+      var placeData = this.model.toJSON(),
+          survey = this.model.responseCollection.first(),
+          surveyData = (survey ? survey.toJSON() : {}),
+          surveyConfig = S.config.survey,
+          html;
+
+      _.each(surveyConfig.items, function(item) {
+        item.value = surveyData[item.name];
+      });
+
+      html = this.template({place: placeData, survey: surveyData, survey_config: surveyConfig});
       this.$el.html(html);
+      this.updateConditionalFields();
       return this;
     }
   });

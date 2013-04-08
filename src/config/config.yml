@@ -36,13 +36,13 @@ survey:
       name: phone_number
       attrs:
         - key: placeholder
-          value: _('(___) ___-____')
+          value: _((___) ___-____)
     - prompt: _(Fax Number)
       type: text
       name: fax_number
       attrs:
         - key: placeholder
-          value: _('(___) ___-____')
+          value: _((___) ___-____ )
     - prompt: _(Email Address)
       type: text
       name: email_address
@@ -52,14 +52,32 @@ survey:
       attrs:
         - key: placeholder
           value: 'http://'
+
     - prompt: _(Type of Business)
-      name: location_type
+      name: business_type
       type: select
       options:
         - label: _(Retail)
           value: retail
         - label: _(Bar)
           value: bar
+        - label: _(Restaurant)
+          value: restaurant
+
+    - prompt: _(Type of Food)
+      name: food_type
+      type: text
+      condition:
+        - field: business_type
+          value: restaurant
+
+    - prompt: _(What is sold?)
+      name: merch_type
+      type: text
+      condition:
+        - field: business_type
+          value: retail
+
     - prompt: _(Ethnicity)
       type: select
       name: ethnicity
@@ -76,3 +94,17 @@ survey:
           value: hispanic
         - label: _(Asian)
           value: asian
+
+    - prompt: _(Are there any issues with this listing?)
+      type: checkbox
+      name: problems
+
+    - prompt: ""
+      type: textarea
+      name: problem_description
+      attrs:
+        - key: placeholder
+          value: _(Note issues with the listing here.)
+      condition:
+        - field: problems
+          value: checked

@@ -73,6 +73,18 @@
         }
       });
 
+      Handlebars.registerHelper('getAttr', function(obj, attr, options) {
+        if (obj !== undefined) {
+          return obj[attr];
+        }
+      });
+
+      Handlebars.registerHelper('select', function(value, options) {
+        var $el = $('<select />').html(options.fn(this));
+        $el.find('[value="' + value + '"]').attr('selected', 'selected');
+        return $el.html();
+      });
+
       // Initialise the templates
       var placeListSource = $('#place-list-tpl').html(),
           placeFormSource = $('#place-form-tpl').html(),
@@ -83,7 +95,7 @@
       S.placeFormTemplate = Handlebars.compile(placeFormSource);
 
       // Create our place collection
-      S.placeCollection = new Shareabouts.PlaceCollection();
+      S.placeCollection = new Shareabouts.PlaceCollection([], {responseType: 'survey'});
 
       // Create the router
       S.router = new S.Router({content: '#content'});
