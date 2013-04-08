@@ -4,39 +4,48 @@
     <fieldset>
       <legend>148 Lafayette St.</legend>
 
-      <label>Business name:</label>
-      <input type="text" value="OpenPlans">
+      <input type="hidden" name="visible" value="on">
 
-      <label>Contact name:</label>
-      <input type="text" value="Ellen McDermott">
+      {{#each survey_config.items}}
 
-      <label>Phone number:</label>
-      <input type="tel" placeholder="(___) ___-____">
+        <div class="survey-field survey-field-{{ name }}">
+          <label class="survey-label survey-label-{{ name }}" for="survey-{{ name }}">
+            {{#_}}{{ prompt }}{{# optional }} (optional){{/ optional }}{{/_}}
+          </label>
 
-      <label>Fax number:</label>
-      <input type="tel" placeholder="(___) ___-____">
+          <div class="survey-widgets survey-widgets-{{ name }}">
+            {{#isInput}}
+            <input id="survey-{{ name }}" name="{{ name }}" type="{{ type }}" {{#attrs}} {{ key }}="{{ value }}"{{/attrs}}>
+            {{/isInput}}
 
-      <hr>
+            {{#isTextarea}}
+            <textarea id="survey-{{ name }}" name="{{ name }}"{{#attrs}} {{ key }}="{{ value }}"{{/attrs}}></textarea>
+            {{/isTextarea}}
 
-      <label>What kind of business is it?</label>
-      <select>
-        <option>Retail</option>
-        <option>Bar</option>
-      </select>
+            {{#isSelect}}
+            <select id="survey-{{ name }}" name="{{ name }}" type="{{ type }}" {{#attrs}} {{ key }}="{{ value }}"{{/attrs}}>
+              {{# options }}
+                <option value="{{value}}">{{label}}</option>
+              {{/ options }}
+            </select>
+            {{/isSelect}}
 
-      <label>What is sold?</label>
-      <input type="text">
+            {{#isFile}}
+            <span class="fileinput-container {{^is_fileinput_supported}}disabled{{/is_fileinput_supported}}">
+              <span>{{ inputfile_label }}</span>
+              <input id="place-{{ name }}" name="{{ name }}" type="{{ type }}" {{#attrs}} {{ key }}="{{ value }}"{{/attrs}}>
+            </span>
 
-      <hr>
+            <span class="fileinput-name">
+              {{^isFileInputSupported}}Sorry, your browser doesn't support file uploads.{{/isFileInputSupported}}
+            </span>
+            {{/isFile}}
+          </div>
+        </div>
 
-      <label>Ethnicity</label>
-      <label class="checkbox"><input type="checkbox"> Caucasian</label>
-      <label class="checkbox"><input type="checkbox"> African American</label>
-      <label class="checkbox"><input type="checkbox"> Hispanic</label>
-      <label class="checkbox"><input type="checkbox"> Asian</label>
+      {{/each}}
+
     </fieldset>
-
-    <hr>
 
     <fieldset>
       <legend>Other Information</legend>

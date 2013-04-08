@@ -127,7 +127,7 @@ var Surveyor = Surveyor || {};
 
     render: function() {
       var data = this.model.toJSON(),
-          html = this.template(data);
+          html = this.template(_.extend(data, {survey_config: S.config.survey}));
       this.$el.html(html);
       return this;
     }

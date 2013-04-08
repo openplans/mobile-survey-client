@@ -23,47 +23,56 @@ map:
     attribution: '&copy; OpenStreetMap contributors, CC-BY-SA. <a href="http://mapbox.com/about/maps" target="_blank">Terms &amp; Feedback</a>'
   layers: []
 
-place:
+survey:
   items:
-    - prompt: _(Location Name)
+    - prompt: _(Business Name)
       type: text
-      name: name
+      name: business_name
+    - prompt: _(Contact Name)
+      type: text
+      name: contact_name
+    - prompt: _(Phone Number)
+      type: text
+      name: phone_number
       attrs:
         - key: placeholder
-          value: _(Location Name)
-        - key: size
-          value: 30
-    - prompt: _(Location Type)
+          value: _('(___) ___-____')
+    - prompt: _(Fax Number)
+      type: text
+      name: fax_number
+      attrs:
+        - key: placeholder
+          value: _('(___) ___-____')
+    - prompt: _(Email Address)
+      type: text
+      name: email_address
+    - prompt: _(Web Address)
+      type: text
+      name: web_address
+      attrs:
+        - key: placeholder
+          value: 'http://'
+    - prompt: _(Type of Business)
+      name: location_type
       type: select
       options:
-        - label: _(Landmark)
-          value: landmark
-        - label: _(Park)
-          value: park
-        - label: _(School)
-          value: school
-      name: location_type
-    - prompt: _(Image)
-      inputfile_label: _(Add an Image)
-      type: file
-      name: my_image
+        - label: _(Retail)
+          value: retail
+        - label: _(Bar)
+          value: bar
+    - prompt: _(Ethnicity)
+      type: select
+      name: ethnicity
       optional: true
       attrs:
-        - key: accept
-          value: image/*
-    - prompt: _(Your Name)
-      type: text
-      name: submitter_name
-      optional: true
-      attrs:
-        - key: placeholder
-          value: _(Name)
-        - key: size
-          value: 30
-    - prompt: _(Description)
-      type: textarea
-      name: description
-      optional: true
-      attrs:
-        - key: placeholder
-          value: _(Description...)
+        - key: multiple
+          value: multiple
+      options:
+        - label: _(Caucasian)
+          value: caucasian
+        - label: _(African American)
+          value: african_american
+        - label: _(Hispanic)
+          value: hispanic
+        - label: _(Asian)
+          value: asian
