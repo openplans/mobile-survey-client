@@ -152,15 +152,17 @@ var Surveyor = Surveyor || {};
           currentLocationMarkers = L.layerGroup([]).addTo(self.map);
 
       var onLocationError = function(evt) {
-        var message;
+        var mapOptions = self.options.mapConfig.options,
+            message;
 
         // Fetch new data near this place
         self.collection.fetch({
           reset: true,
           data: {
-            near: self.options.mapConfig.options.center.lat+','+self.options.mapConfig.options.center.lng
+            near: mapOptions.center.lat+','+mapOptions.center.lng
           }
         });
+        self.map.setView([mapOptions.center.lat, mapOptions.center.lng], mapOptions.zoom);
 
         switch (evt.code) {
           // Unknown
