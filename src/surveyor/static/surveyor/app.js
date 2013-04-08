@@ -13,13 +13,20 @@ var Surveyor = Surveyor || {};
 
     placeList: function() {
       console.log('At the list');
-      S.contentView.showSpinner();
 
+      // Check whether we already have places...
       if (S.placeCollection.size() > 0) {
         S.placeListView.render();
         S.contentView.showView(S.placeListView);
+        return;
       }
-      // S.placeCollection.fetch({reset: true});
+
+      // If not, init geolocation
+      if (S.config.map.geolocation_enabled) {
+        S.mapView.initGeolocation();
+      }
+
+      S.contentView.showSpinner();
     },
 
     placeForm: function(placeId) {
@@ -141,11 +148,6 @@ var Surveyor = Surveyor || {};
 
       // Remove default prefix
       self.map.attributionControl.setPrefix('');
-
-      // Init geolocation
-      if (mapConfig.geolocation_enabled) {
-        self.initGeolocation();
-      }
     },
     initGeolocation: function() {
       var self = this,
