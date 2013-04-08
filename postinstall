@@ -7,7 +7,7 @@ echo "Writing the local settings file..."
 echo "  - Setting the path to the Shareabouts config"
 echo "  - Setting the dataset access location and key"
 
-cat >> src/project/local_settings.py <<EOF
+cat >> src/config/local_settings.py <<EOF
 
 import json
 import os.path
