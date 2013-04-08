@@ -23,8 +23,41 @@ var Surveyor = Surveyor || {};
     },
 
     placeForm: function(placeId) {
+      var placeFormView, place, createPlaceFormView,
+          createPlaceFormView = function() {
+            S.placeFormViews[placeId] = placeFormView = new S.PlaceFormView({
+              model: place,
+              template: S.placeFormTemplate
+            });
+            placeFormView.render();
+            S.contentView.showView(placeFormView);
+          };
       console.log('At the form for ' + placeId);
-      // S.placeFormViews[placeId].render();
+
+      // If the place is loaded and we already have a view for it...
+      placeFormView = S.placeFormViews[placeId]
+      if (placeFormView) {
+        S.contentView.showView(placeFormView);
+        return;
+      }
+
+      // If the place is loaded, but there's no view yet...
+      place = S.placeCollection.get(placeId);
+      if (place) {
+        createPlaceFormView();
+        return;
+      }
+
+      // If the place is not yet loaded...
+      S.placeCollection.add({id: placeId});
+      place = S.placeCollection.get(placeId);
+      place.fetch({
+        success: function() {
+          createPlaceFormView();
+        }
+      });
+
+      S.contentView.showSpinner();
     }
   });
 
@@ -82,8 +115,7 @@ var Surveyor = Surveyor || {};
 
   S.PlaceFormView = Backbone.View.extend({
     initialize: function() {
-      var templateSource = $('#place-form-tpl').html();
-      this.template = Handlebars.compile(templateSource);
+      this.template = this.options.template;
     },
 
     render: function() {

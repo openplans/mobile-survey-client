@@ -1,6 +1,6 @@
 <div class="place place-{{ id }} row">
   <div class="span6">
-    <a href="/{{ id }}" class="address">{{ address }}</a>
+    <a href="/{{ id }}" class="address place-form-link">{{ address }}</a>
     <span class="last-survey">
       {{#if has_been_surveyed }}
         {{#_}}Last surveyed <time datetime="{{ updated_datetime }}">{{ updated_datetime }}</time> by <a href="#">{{ updater_name }}</a>{{/_}}
