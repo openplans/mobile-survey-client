@@ -22,7 +22,9 @@ SHAREABOUTS = {
     'CONTEXT': {
         'analytics_key': env.get('SHAREABOUTS_ANALYTICS_KEY', 'SHAREABOUTS_ANALYTICS_KEY-not-set-in-dotcloud-environment!!!'),
         'feedback_key': env.get('SHAREABOUTS_FEEDBACK_KEY', 'SHAREABOUTS_FEEDBACK_KEY-not-set-in-dotcloud-environment!!!'),
-    }
+    },
+
+    'CONFIG': os.path.dirname(__file__)
 }
 
 STATIC_ROOT = '/home/dotcloud/current/static/'
