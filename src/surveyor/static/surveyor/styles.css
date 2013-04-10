@@ -1,3 +1,13 @@
+.survey-save-success,
+.survey-save-error {
+  position: fixed;
+  z-index: 1030;
+  top: 10px;
+  width: auto;
+
+  display: none;
+}
+
 .address,
 .more-places {
   font-size: 18px;
