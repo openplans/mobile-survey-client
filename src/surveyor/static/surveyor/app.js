@@ -98,6 +98,7 @@ var Surveyor = Surveyor || {};
     },
 
     showView: function(view) {
+      view.delegateEvents();
       this.$el.html(view.el);
     },
 
