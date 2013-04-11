@@ -11,23 +11,30 @@ var Surveyor = Surveyor || {};
       ':placeId': 'placeForm'
     },
 
+    initPlaceCollection: function(locateOptions) {
+      if (S.currentLocation) {
+        S.fetchNearbyPlaces(S.currentLocation.latlng.lat, S.currentLocation.latlng.lng);
+      } else {
+        S.mapView.map.locate(locateOptions);
+      }
+    },
+
     placeList: function() {
-      console.log('At the list');
       $('.back-btn').hide();
 
-      // Check whether we already have places...
-      if (S.placeCollection.size() > 0) {
-        S.placeListView.render();
-        S.contentView.showView(S.placeListView);
-        return;
-      }
+      S.contentView.showView(S.placeListView.render());
 
-      // If not, init geolocation
-      if (S.config.map.geolocation_enabled) {
-        S.mapView.initGeolocation();
+      // Init nearby places if we need them
+      if (S.placeCollection.size() === 0) {
+        this.initPlaceCollection({setView: true});
+      } else {
+        S.mapView.viewLayers.clearLayers();
+        if (S.currentLocation) {
+          S.mapView.map.fitBounds(S.currentLocation.bounds);
+        } else {
+          S.mapView.map.setView([S.config.map.options.center.lat, S.config.map.options.center.lng], S.config.map.options.zoom);
+        }
       }
-
-      S.contentView.showSpinner();
     },
 
     placeForm: function(placeId) {
@@ -37,17 +44,21 @@ var Surveyor = Surveyor || {};
           createPlaceFormView = function() {
             S.placeFormViews[placeId] = placeFormView = new S.PlaceFormView({
               model: place,
-              template: S.placeFormTemplate
+              template: S.placeFormTemplate,
+              layerGroup: S.mapView.viewLayers
             });
-            placeFormView.render();
-            S.contentView.showView(placeFormView);
+            S.contentView.showView(placeFormView.render());
           };
-      console.log('At the form for ' + placeId);
+
+      // Init nearby places if we need them
+      if (S.placeCollection.size() === 0) {
+        this.initPlaceCollection();
+      }
 
       // If the place is loaded and we already have a view for it...
       placeFormView = S.placeFormViews[placeId];
       if (placeFormView) {
-        S.contentView.showView(placeFormView);
+        S.contentView.showView(placeFormView.render());
         return;
       }
 
@@ -61,16 +72,15 @@ var Surveyor = Surveyor || {};
       // If the place is not yet loaded...
       S.placeCollection.add({id: placeId});
       place = S.placeCollection.get(placeId);
+
+      // Render an empty place with a spinner, it will update on model change
+      createPlaceFormView();
+
       place.fetch({
         data: {
           include_submissions: true
-        },
-        success: function() {
-          createPlaceFormView();
         }
       });
-
-      S.contentView.showSpinner();
     }
   });
 
@@ -89,27 +99,6 @@ var Surveyor = Surveyor || {};
     events: {
       'click a': 'navigate'
     },
-    showSpinner: function() {
-      var opts = {
-            lines: 13, // The number of lines to draw
-            length: 20, // The length of each line
-            width: 10, // The line thickness
-            radius: 30, // The radius of the inner circle
-            corners: 1, // Corner roundness (0..1)
-            rotate: 0, // The rotation offset
-            direction: 1, // 1: clockwise, -1: counterclockwise
-            color: '#000', // #rgb or #rrggbb
-            speed: 1, // Rounds per second
-            trail: 60, // Afterglow percentage
-            shadow: false, // Whether to render a shadow
-            hwaccel: false, // Whether to use hardware acceleration
-            className: 'load-spinner', // The CSS class to assign to the spinner
-            zIndex: 2e9, // The z-index (defaults to 2000000000)
-            top: 'auto', // Top position relative to parent in px
-            left: 'auto' // Left position relative to parent in px
-          },
-          spinner = new Spinner(opts).spin(this.el);
-    },
 
     showView: function(view) {
       view.delegateEvents();
@@ -126,7 +115,6 @@ var Surveyor = Surveyor || {};
     initialize: function() {
       this.template = this.options.template;
       this.collection.on('reset', this.render, this);
-      console.log('initialized');
     },
 
     prettifyTimes: function() {
@@ -138,10 +126,19 @@ var Surveyor = Surveyor || {};
     },
 
     render: function() {
-      var data = this.collection.toJSON(),
-          html = this.template({'places': data});
-      this.$el.html(html);
-      this.prettifyTimes();
+      var data, html;
+
+      if (this.collection.size() > 0) {
+        data = this.collection.toJSON();
+        html = this.template({'places': data});
+
+        this.$el.html(html);
+        this.prettifyTimes();
+      } else {
+        // Show a spinner
+        S.loadSpinner.spin(this.el);
+      }
+
       return this;
     }
   });
@@ -149,6 +146,7 @@ var Surveyor = Surveyor || {};
   S.PlaceFormView = Backbone.View.extend({
     initialize: function() {
       this.template = this.options.template;
+      this.model.on('change', this.render, this);
     },
 
     events: {
@@ -283,19 +281,35 @@ var Surveyor = Surveyor || {};
     },
 
     render: function() {
-      var placeData = this.model.toJSON(),
-          survey = this.model.responseCollection.first(),
-          surveyData = (survey ? survey.toJSON() : {}),
-          surveyConfig = S.config.survey,
-          html;
+     var placeData,
+         survey,
+         surveyData,
+         surveyConfig,
+         html;
 
-      _.each(surveyConfig.items, function(item) {
-        item.value = surveyData[item.name];
-      });
+      if (this.model.has('location')) {
+        placeData = this.model.toJSON();
+        survey = this.model.responseCollection.first();
+        surveyData = (survey ? survey.toJSON() : {});
+        surveyConfig = S.config.survey;
 
-      html = this.template({place: placeData, survey: surveyData, survey_config: surveyConfig});
-      this.$el.html(html);
-      this.updateConditionalFields();
+        _.each(surveyConfig.items, function(item) {
+          item.value = surveyData[item.name];
+        });
+
+        html = this.template({place: placeData, survey: surveyData, survey_config: surveyConfig});
+        this.$el.html(html);
+        this.updateConditionalFields();
+
+        if (this.options.layerGroup) {
+          this.options.layerGroup.clearLayers();
+          this.layer = L.marker([placeData.location.lat, placeData.location.lng]).addTo(this.options.layerGroup);
+        }
+      } else {
+        // Show a spinner
+        S.loadSpinner.spin(this.el);
+      }
+
       return this;
     }
   });
@@ -313,9 +327,21 @@ var Surveyor = Surveyor || {};
       self.map = L.map(self.el, mapConfig.options);
       self.map.addLayer(baseLayer);
 
+      // Init layer group for views
+      self.viewLayers = L.featureGroup().addTo(self.map);
+      self.viewLayers.on('layeradd', function(evt){
+        self.map.fitBounds(self.viewLayers.getBounds());
+      });
+
       // Remove default prefix
       self.map.attributionControl.setPrefix('');
+
+      // If not, init geolocation
+      if (mapConfig.geolocation_enabled) {
+        this.initGeolocation();
+      }
     },
+
     initGeolocation: function() {
       var self = this,
           currentLocationMarkers = L.layerGroup([]).addTo(self.map);
@@ -323,15 +349,6 @@ var Surveyor = Surveyor || {};
       var onLocationError = function(evt) {
         var mapOptions = self.options.mapConfig.options,
             message;
-
-        // Fetch new data near this place
-        self.collection.fetch({
-          reset: true,
-          data: {
-            near: mapOptions.center.lat+','+mapOptions.center.lng
-          }
-        });
-        self.map.setView([mapOptions.center.lat, mapOptions.center.lng], mapOptions.zoom);
 
         switch (evt.code) {
           // Unknown
@@ -351,46 +368,31 @@ var Surveyor = Surveyor || {};
             message = 'It took too long to determine your location. Please try again.';
             break;
         }
+
+        self.trigger('locationerror', evt);
         window.alert(message);
       };
 
       var onLocationFound = function(evt) {
-        var msg, radius;
+        var radius = evt.accuracy / 2,
+            msg;
 
-        if(!self.map.options.maxBounds || self.map.options.maxBounds.contains(evt.latlng)) {
-          // Fetch new data near this place
-          self.collection.fetch({
-            reset: true,
-            data: {
-              near: evt.latlng.lat+','+evt.latlng.lng
-            },
-            success: function() {
-              S.contentView.showView(S.placeListView);
-            }
-          });
+        currentLocationMarkers.clearLayers();
 
-          self.map.fitBounds(evt.bounds);
+        currentLocationMarkers.addLayer(L.circleMarker(evt.latlng, {
+          radius: 4,
+          weight: 2,
+          color: '#06f',
+          fillOpacity: 1
+        }));
 
-          radius = evt.accuracy / 2;
-          currentLocationMarkers.clearLayers();
+        currentLocationMarkers.addLayer(L.circle(evt.latlng, radius, {
+          weight: 1,
+          color: '#06f',
+          fillOpacity: 0.1
+        }));
 
-          currentLocationMarkers.addLayer(L.circleMarker(evt.latlng, {
-            radius: 4,
-            weight: 2,
-            color: '#06f',
-            fillOpacity: 1
-          }));
-
-          currentLocationMarkers.addLayer(L.circle(evt.latlng, radius, {
-            weight: 1,
-            color: '#06f',
-            fillOpacity: 0.1
-          }));
-        } else {
-          msg = 'It looks like you\'re not in a place where we\'re collecting ' +
-            'data. I\'m going to leave the map where it is, okay?';
-          window.alert(msg);
-        }
+        self.trigger('locationfound', evt);
       };
 
       // Add the geolocation control link
@@ -401,11 +403,6 @@ var Surveyor = Surveyor || {};
       // Bind event handling
       this.map.on('locationerror', onLocationError);
       this.map.on('locationfound', onLocationFound);
-
-      // Go to the current location if specified
-      if (this.options.mapConfig.geolocation_onload) {
-        this.map.locate();
-      }
     },
     handleGeolocateClick: function(evt) {
       if (evt) {
