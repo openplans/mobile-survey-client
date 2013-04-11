@@ -11,22 +11,27 @@ var Surveyor = Surveyor || {};
       ':placeId': 'placeForm'
     },
 
-    initPlaceCollection: function() {
+    initPlaceCollection: function(locateOptions) {
       if (S.currentLocation) {
         S.fetchNearbyPlaces(S.currentLocation.latlng.lat, S.currentLocation.latlng.lng);
       } else {
-        S.mapView.map.locate();
+        S.mapView.map.locate(locateOptions);
       }
     },
 
     placeList: function() {
-      console.log('At the list');
-
       S.contentView.showView(S.placeListView.render());
 
       // Init nearby places if we need them
       if (S.placeCollection.size() === 0) {
-        this.initPlaceCollection();
+        this.initPlaceCollection({setView: true});
+      } else {
+        S.mapView.viewLayers.clearLayers();
+        if (S.currentLocation) {
+          S.mapView.map.fitBounds(S.currentLocation.bounds);
+        } else {
+          S.mapView.map.setView([S.config.map.options.center.lat, S.config.map.options.center.lng], S.config.map.options.zoom);
+        }
       }
     },
 
@@ -35,11 +40,11 @@ var Surveyor = Surveyor || {};
           createPlaceFormView = function() {
             S.placeFormViews[placeId] = placeFormView = new S.PlaceFormView({
               model: place,
-              template: S.placeFormTemplate
+              template: S.placeFormTemplate,
+              layerGroup: S.mapView.viewLayers
             });
             S.contentView.showView(placeFormView.render());
           };
-      console.log('At the form for ' + placeId);
 
       // Init nearby places if we need them
       if (S.placeCollection.size() === 0) {
@@ -49,7 +54,7 @@ var Surveyor = Surveyor || {};
       // If the place is loaded and we already have a view for it...
       placeFormView = S.placeFormViews[placeId];
       if (placeFormView) {
-        S.contentView.showView(placeFormView);
+        S.contentView.showView(placeFormView.render());
         return;
       }
 
@@ -79,6 +84,7 @@ var Surveyor = Surveyor || {};
     events: {
       'click a': 'navigate'
     },
+
     showView: function(view) {
       this.$el.html(view.el);
     },
@@ -217,6 +223,10 @@ var Surveyor = Surveyor || {};
         this.$el.html(html);
         this.updateConditionalFields();
 
+        if (this.options.layerGroup) {
+          this.options.layerGroup.clearLayers();
+          this.layer = L.marker([placeData.location.lat, placeData.location.lng]).addTo(this.options.layerGroup);
+        }
       } else {
         // Show a spinner
         S.loadSpinner.spin(this.el);
@@ -238,6 +248,12 @@ var Surveyor = Surveyor || {};
       // Init the map
       self.map = L.map(self.el, mapConfig.options);
       self.map.addLayer(baseLayer);
+
+      // Init layer group for views
+      self.viewLayers = L.featureGroup().addTo(self.map);
+      self.viewLayers.on('layeradd', function(evt){
+        self.map.fitBounds(self.viewLayers.getBounds());
+      });
 
       // Remove default prefix
       self.map.attributionControl.setPrefix('');
@@ -280,11 +296,9 @@ var Surveyor = Surveyor || {};
       };
 
       var onLocationFound = function(evt) {
-        var msg, radius;
+        var radius = evt.accuracy / 2,
+            msg;
 
-        self.map.fitBounds(evt.bounds);
-
-        radius = evt.accuracy / 2;
         currentLocationMarkers.clearLayers();
 
         currentLocationMarkers.addLayer(L.circleMarker(evt.latlng, {
