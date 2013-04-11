@@ -1,4 +1,4 @@
-/*globals jQuery Backbone moment Handlebars _ L */
+/*globals jQuery Backbone moment Handlebars _ L Spinner */
 
 var Surveyor = Surveyor || {};
 
@@ -30,7 +30,7 @@ var Surveyor = Surveyor || {};
     },
 
     placeForm: function(placeId) {
-      var placeFormView, place, createPlaceFormView,
+      var placeFormView, place,
           createPlaceFormView = function() {
             S.placeFormViews[placeId] = placeFormView = new S.PlaceFormView({
               model: place,
@@ -42,7 +42,7 @@ var Surveyor = Surveyor || {};
       console.log('At the form for ' + placeId);
 
       // If the place is loaded and we already have a view for it...
-      placeFormView = S.placeFormViews[placeId]
+      placeFormView = S.placeFormViews[placeId];
       if (placeFormView) {
         S.contentView.showView(placeFormView);
         return;
@@ -72,6 +72,9 @@ var Surveyor = Surveyor || {};
   });
 
   S.ContentView = Backbone.View.extend({
+    events: {
+      'click a': 'navigate'
+    },
     showSpinner: function() {
       var opts = {
             lines: 13, // The number of lines to draw
@@ -96,6 +99,11 @@ var Surveyor = Surveyor || {};
 
     showView: function(view) {
       this.$el.html(view.el);
+    },
+
+    navigate: function(evt) {
+      evt.preventDefault();
+      S.router.navigate(evt.target.getAttribute('href'), {trigger: true});
     }
   });
 
