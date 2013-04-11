@@ -14,14 +14,14 @@
 {% block content %}
   {% handlebarsjs '(.*)' %}
 
-<div class="navbar navbar-inverse navbar-fixed-top">
+<div class="navbar navbar-inverse navbar-fixed-top" id="navbar-top">
   <div class="navbar-inner">
     <div class="container">
-      <button class="btn btn-navbar btn-navbar-left btn-full-icon">
-        <span class="icon-screenshot icon-white"></span>
-      </button>
+      <a href="/" class="back-btn btn btn-navbar btn-navbar-left btn-full-icon">
+        <span class="icon-chevron-left icon-white"></span>
+      </a>
 
-      <a class="brand" href="#">Surveyor</a>
+      <a class="brand" href="/">Surveyor</a>
     </div>
   </div>
 </div><!--/.navbar-->
@@ -117,6 +117,10 @@
         el: '#top-map',
         mapConfig: S.config.map,
         collection: S.placeCollection
+      });
+
+      S.navbarView = new S.NavbarView({
+        el: '#navbar-top'
       });
 
       Backbone.history.start({pushState: true});

@@ -13,6 +13,7 @@ var Surveyor = Surveyor || {};
 
     placeList: function() {
       console.log('At the list');
+      $('.back-btn').hide();
 
       // Check whether we already have places...
       if (S.placeCollection.size() > 0) {
@@ -30,6 +31,8 @@ var Surveyor = Surveyor || {};
     },
 
     placeForm: function(placeId) {
+      $('.back-btn').show();
+
       var placeFormView, place,
           createPlaceFormView = function() {
             S.placeFormViews[placeId] = placeFormView = new S.PlaceFormView({
@@ -68,6 +71,17 @@ var Surveyor = Surveyor || {};
       });
 
       S.contentView.showSpinner();
+    }
+  });
+
+  S.NavbarView = Backbone.View.extend({
+    events: {
+      'click a': 'navigate'
+    },
+
+    navigate: function(evt) {
+      evt.preventDefault();
+      S.router.navigate(evt.target.getAttribute('href'), {trigger: true});
     }
   });
 
