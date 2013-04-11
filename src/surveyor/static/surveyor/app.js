@@ -230,22 +230,32 @@ var Surveyor = Surveyor || {};
 
       var attrs = this.getAttrs(),
           survey = this.model.responseCollection.first(),
-          self = this;
+          self = this,
+          saveOpts = {
+            complete: function() {
+              // Regardless of whether the save was successful, hide the save
+              // progress box, and re-enable the buttons.
+              self.finishSave();
+            },
+            success: function() {
+              // On successful save, show the success box and fade it out
+              // after a couple of seconds.
+              self.$('.survey-save-success').show();
+              _.delay(function() { self.$('.survey-save-success').fadeOut(); }, 2000)
+            },
+            error: function() {
+              // Display a clone of the error modal, in case this view is no
+              // longer displayed.
+              self.$('.survey-save-error').clone().modal('show');
+            }
+          };
 
       this.startSave();
 
       if (survey) {
-        survey.save(attrs, {
-          complete: _.bind(this.finishSave, this),
-          success: function() {
-            self.$('.survey-save-success').show();
-            _.delay(function() { self.$('.survey-save-success').fadeOut(); }, 2000)
-          }
-        });
+        survey.save(attrs, saveOpts);
       } else {
-        this.model.responseCollection.create(attrs, {
-          complete: _.bind(this.finishSave, this)
-        });
+        this.model.responseCollection.create(attrs, saveOpts);
       }
     },
 

@@ -65,6 +65,13 @@
 
       <div class="survey-save-inprogress alert mini-alert pull-right alert-info"><span class="save-spinner-wrapper"></span> {{#_}}Saving{{/_}}</div>
       <div class="survey-save-success    alert mini-alert pull-right alert-success">{{#_}}Saved{{/_}}</div>
+
+      <div class="survey-save-error modal hide fade">
+        <div class="modal-body">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <p>{{#_}}There was a problem saving the survey for {{place.address}}. Please try again in a few minutes.{{/_}}</p>
+        </div>
+      </div>
     </div>
   </form>
 </div>
