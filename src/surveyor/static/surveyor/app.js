@@ -86,7 +86,7 @@ var Surveyor = Surveyor || {};
             trail: 60, // Afterglow percentage
             shadow: false, // Whether to render a shadow
             hwaccel: false, // Whether to use hardware acceleration
-            className: 'spinner', // The CSS class to assign to the spinner
+            className: 'load-spinner', // The CSS class to assign to the spinner
             zIndex: 2e9, // The z-index (defaults to 2000000000)
             top: 'auto', // Top position relative to parent in px
             left: 'auto' // Left position relative to parent in px
@@ -184,16 +184,68 @@ var Surveyor = Surveyor || {};
       return attrs;
     },
 
+    showSaveSpinner: function() {
+      var opts = {
+            lines: 13, // The number of lines to draw
+            length: 0, // The length of each line
+            width: 4, // The line thickness
+            radius: 5, // The radius of the inner circle
+            corners: 1, // Corner roundness (0..1)
+            rotate: 0, // The rotation offset
+            direction: 1, // 1: clockwise, -1: counterclockwise
+            color: '#000', // #rgb or #rrggbb
+            speed: 1, // Rounds per second
+            trail: 60, // Afterglow percentage
+            shadow: false, // Whether to render a shadow
+            hwaccel: false, // Whether to use hardware acceleration
+            className: 'save-spinner', // The CSS class to assign to the spinner
+            zIndex: 2e9, // The z-index (defaults to 2000000000)
+            top: 'auto', // Top position relative to parent in px
+            left: 'auto' // Left position relative to parent in px
+          },
+          target = this.$('.save-spinner-wrapper'),
+          spinner = new Spinner(opts).spin(target[0]);
+    },
+
+    startSave: function() {
+      // Show the save box, and render a spinner into it
+      this.$('.survey-save-inprogress').show();
+      this.showSaveSpinner();
+
+      // Disable the save button
+      this.$('.save-btn').attr('disabled', 'disabled');
+
+      // Disable the discard button
+      this.$('.discard-btn').attr('disabled', 'disabled');
+    },
+
+    finishSave: function() {
+      this.$('.survey-save-inprogress').hide();
+      this.$('.save-btn').removeAttr('disabled');
+      this.$('.discard-btn').removeAttr('disabled');
+    },
+
     saveSurvey: function(evt) {
       evt.preventDefault();
 
       var attrs = this.getAttrs(),
-          survey = this.model.responseCollection.first();
+          survey = this.model.responseCollection.first(),
+          self = this;
+
+      this.startSave();
 
       if (survey) {
-        survey.save(attrs);
+        survey.save(attrs, {
+          complete: _.bind(this.finishSave, this),
+          success: function() {
+            self.$('.survey-save-success').show();
+            _.delay(function() { self.$('.survey-save-success').fadeOut(); }, 2000)
+          }
+        });
       } else {
-        this.model.responseCollection.create(attrs);
+        this.model.responseCollection.create(attrs, {
+          complete: _.bind(this.finishSave, this)
+        });
       }
     },
 

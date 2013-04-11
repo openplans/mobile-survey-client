@@ -59,19 +59,14 @@
 
     <hr>
 
-    <button type="button" class="btn" id="mock-discard-button">Discard</button>
-    <button type="submit" class="btn btn-primary">Save</button>
+    <div class="form-actions">
+      <button type="button" class="btn discard-btn">{{#_}}Discard{{/_}}</button>
+      <button type="submit" class="btn btn-primary save-btn">{{#_}}Save{{/_}}</button>
+
+      <div class="survey-save-inprogress alert mini-alert pull-right alert-info"><span class="save-spinner-wrapper"></span> {{#_}}Saving{{/_}}</div>
+      <div class="survey-save-success    alert mini-alert pull-right alert-success">{{#_}}Saved{{/_}}</div>
+    </div>
   </form>
-</div>
-
-<div class="survey-save-success alert alert-success fade in">
-  <button type="button" class="close" data-dismiss="alert">&times;</button>
-  Saved!
-</div>
-
-<div class="survey-save-error alert alert-error fade in">
-  <button type="button" class="close" data-dismiss="alert">&times;</button>
-  Could not save. Try again in a few minutes.
 </div>
 
 <div class="modal hide fade" id="discard-confirmation">

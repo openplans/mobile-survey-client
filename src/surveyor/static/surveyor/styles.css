@@ -1,13 +1,3 @@
-.survey-save-success,
-.survey-save-error {
-  position: fixed;
-  z-index: 1030;
-  top: 10px;
-  width: auto;
-
-  display: none;
-}
-
 .address,
 .more-places {
   font-size: 18px;
@@ -96,8 +86,28 @@ body.splash .navbar {
   -o-transform: rotate(-45deg);
 }
 
-.spinner {
+.load-spinner {
   margin-top: 120px;
+}
+
+.mini-alert {
+  padding: 4px 4px 4px 4px;
+  margin-bottom: 0;
+}
+
+.survey-save-success,
+.survey-save-inprogress {
+  display: none;
+}
+
+.survey-save-inprogress {
+  padding-left: 40px;
+}
+
+.save-spinner-wrapper {
+  position: relative;
+  top: 5px;
+  left: -10px;
 }
 
 @media (min-width: 979px) {
