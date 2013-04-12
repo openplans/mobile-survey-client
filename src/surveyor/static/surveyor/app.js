@@ -305,14 +305,9 @@ var Surveyor = Surveyor || {};
     },
 
     getSurvey: function() {
-      if (this.survey)
-        return this.survey;
+      if (!this.survey)
+        this.survey = this.model.responseCollection.first();
 
-      this.survey = this.model.responseCollection.first();
-      if (this.survey)
-        return this.survey;
-
-      this.survey = this.getPlace().responseCollection.create();
       return this.survey;
     },
 
