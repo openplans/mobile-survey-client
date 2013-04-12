@@ -173,8 +173,7 @@ var Surveyor = Surveyor || {};
     events: {
       'change input, textarea, select': 'onInputChanged',
       'submit form': 'saveSurvey',
-      'click .discard-confirmation .yes-btn': 'discardChanges',
-      'click .discard-confirmation .no-btn': 'comeBack'
+      'click .discard-confirmation .yes-btn': 'discardChanges'
     },
 
     onInputChanged: function(evt) {
