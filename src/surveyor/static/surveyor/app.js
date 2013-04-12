@@ -348,6 +348,7 @@ var Surveyor = Surveyor || {};
 
       if (survey) {
         survey.save(attrs, saveOpts);
+        S.currentUser = attrs['submitter_name'];
       } else {
         place.responseCollection.create(attrs, saveOpts);
       }

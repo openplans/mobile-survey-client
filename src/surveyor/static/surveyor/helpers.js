@@ -73,3 +73,12 @@ Handlebars.registerHelper('last_surveyed_by', function() {
       lastSurvey = _.last(surveys.sortBy('updated_datetime'));
   if (lastSurvey) return lastSurvey.get('submitter_name');
 });
+
+/**********************************************************
+ * Place form helpers
+ * ==================
+ */
+
+Handlebars.registerHelper('withCurrentUser', function(options) {
+  return options.fn(_.extend(this, {current_user: Surveyor.currentUser}));
+});
