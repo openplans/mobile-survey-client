@@ -30,14 +30,46 @@ Handlebars.registerHelper('isFileInputSupported', function(options) {
   }
 });
 
-Handlebars.registerHelper('getAttr', function(obj, attr, options) {
-  if (obj !== undefined) {
-    return obj[attr];
-  }
+Handlebars.registerHelper('get', function(attr) {
+  if (this instanceof Backbone.Model)
+    return this.get(attr);
+  else
+    return this[attr];
+});
+
+Handlebars.registerHelper('run', function(func) {
+  return this[func]();
 });
 
 Handlebars.registerHelper('select', function(value, options) {
   var $el = $('<select />').html(options.fn(this));
   $el.find('[value="' + value + '"]').attr('selected', 'selected');
   return $el.html();
+});
+
+
+/**********************************************************
+ * Place list helpers
+ * ==================
+ */
+
+Handlebars.registerHelper('if_has_been_surveyed', function(options) {
+  var surveys = this.responseCollection;
+  if (surveys.length > 0) {
+    return options.fn(this);
+  } else {
+    return options.inverse(this);
+  }
+});
+
+Handlebars.registerHelper('last_surveyed_at', function() {
+  var surveys = this.responseCollection,
+      lastSurvey = _.last(surveys.sortBy('updated_datetime'));
+  if (lastSurvey) return lastSurvey.get('updated_datetime');
+});
+
+Handlebars.registerHelper('last_surveyed_by', function() {
+  var surveys = this.responseCollection,
+      lastSurvey = _.last(surveys.sortBy('updated_datetime'));
+  if (lastSurvey) return lastSurvey.get('submitter_name');
 });

@@ -151,7 +151,7 @@ var Surveyor = Surveyor || {};
 
       if (this.collection.size() > 0) {
         data = this.collection.toJSON();
-        html = this.template({'places': data});
+        html = this.template({'places': this.collection});
 
         this.$el.html(html);
         this.prettifyTimes();

@@ -1,12 +1,12 @@
-<div class="place place-{{ id }} row">
+<div class="place place-{{id}} row">
   <div class="span6">
-    <a href="/{{ id }}" class="address place-form-link">{{ address }}</a>
+    <a href="/{{id}}" class="address place-form-link">{{get 'address'}}</a>
     <span class="last-survey">
-      {{#if has_been_surveyed }}
-        {{#_}}Last surveyed <time datetime="{{ updated_datetime }}">{{ updated_datetime }}</time> by <a href="#">{{ updater_name }}</a>{{/_}}
+      {{#if_has_been_surveyed}}
+        {{#_}}Last surveyed <time datetime="{{last_surveyed_at}}">{{last_surveyed_at}}</time> by {{last_surveyed_by}}{{/_}}
       {{^}}
         {{#_}}Never been surveyed{{/_}}
-      {{/if}}
+      {{/if_has_been_surveyed}}
     </span>
   </div>
 </div>
