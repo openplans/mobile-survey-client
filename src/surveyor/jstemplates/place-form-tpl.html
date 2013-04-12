@@ -16,15 +16,15 @@
 
           <div class="survey-widgets survey-widgets-{{ name }}">
             {{#isInput}}
-            <input id="survey-{{ name }}" name="{{ name }}" type="{{ type }}" {{#attrs}} {{ key }}="{{ value }}"{{/attrs}} value="{{value}}">
+            <input id="survey-{{ name }}" class="survey-input" name="{{ name }}" type="{{ type }}" {{#attrs}} {{ key }}="{{ value }}"{{/attrs}} value="{{value}}">
             {{/isInput}}
 
             {{#isTextarea}}
-            <textarea id="survey-{{ name }}" name="{{ name }}"{{#attrs}} {{ key }}="{{ value }}"{{/attrs}} value="{{value}}"></textarea>
+            <textarea id="survey-{{ name }}" class="survey-input" name="{{ name }}"{{#attrs}} {{ key }}="{{ value }}"{{/attrs}} value="{{value}}"></textarea>
             {{/isTextarea}}
 
             {{#isSelect}}
-            <select id="survey-{{ name }}" name="{{ name }}" type="{{ type }}" {{#attrs}} {{ key }}="{{ value }}"{{/attrs}}>
+            <select id="survey-{{ name }}" class="survey-input" name="{{ name }}" type="{{ type }}" {{#attrs}} {{ key }}="{{ value }}"{{/attrs}}>
               {{#select value}}
               {{#options}}
                 <option value="{{value}}">{{label}}</option>
@@ -36,7 +36,7 @@
             {{#isFile}}
             <span class="fileinput-container {{^is_fileinput_supported}}disabled{{/is_fileinput_supported}}">
               <span>{{ inputfile_label }}</span>
-              <input id="place-{{ name }}" name="{{ name }}" type="{{ type }}" {{#attrs}} {{ key }}="{{ value }}"{{/attrs}}>
+              <input id="place-{{ name }}" class="survey-input" name="{{ name }}" type="{{ type }}" {{#attrs}} {{ key }}="{{ value }}"{{/attrs}}>
             </span>
 
             <span class="fileinput-name">
@@ -54,7 +54,7 @@
 
     <fieldset>
       <label>Your name:</label>
-      <input type="text" name="submitter_name">
+      <input type="text" class="survey-input" name="submitter_name">
     </fieldset>
 
     <hr>
@@ -76,13 +76,13 @@
   </form>
 </div>
 
-<div class="modal hide fade" id="discard-confirmation">
+<div class="discard-confirmation modal hide fade">
   <div class="modal-body">
     <p>You have made changes. Are you sure you want to discard them?</p>
   </div>
   <div class="modal-footer">
-    <a href="place-list.html" class="btn">Yes</a>
-    <a href="#" class="btn btn-primary no-op">No</a>
+    <button class="btn yes-btn">Yes</button>
+    <button class="btn btn-primary no-op no-btn">No</button>
   </div>
 </div>
 

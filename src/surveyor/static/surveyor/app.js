@@ -19,8 +19,25 @@ var Surveyor = Surveyor || {};
       }
     },
 
-    placeList: function() {
+    needsConfirmation: function() {
+      if (S.currentContentView && S.currentContentView.confirmLeave) {
+        return S.currentContentView.confirmLeave();
+      }
+
+      return false;
+    },
+
+    hideBackButton: function() {
       $('.back-btn').hide();
+    },
+
+    placeList: function() {
+      // If we need to confirm something before moving on, then do so. The
+      // confirmation method is responsible for restarting the routing.
+      if (this.needsConfirmation())
+        return;
+
+      this.hideBackButton();
 
       S.contentView.showView(S.placeListView.render());
 
@@ -41,7 +58,7 @@ var Surveyor = Surveyor || {};
       $('.back-btn').show();
 
       var placeFormView, place,
-          createPlaceFormView = function() {
+          createPlaceFormView = function(place) {
             S.placeFormViews[placeId] = placeFormView = new S.PlaceFormView({
               model: place,
               template: S.placeFormTemplate,
@@ -65,7 +82,7 @@ var Surveyor = Surveyor || {};
       // If the place is loaded, but there's no view yet...
       place = S.placeCollection.get(placeId);
       if (place) {
-        createPlaceFormView();
+        createPlaceFormView(place);
         return;
       }
 
@@ -74,7 +91,7 @@ var Surveyor = Surveyor || {};
       place = S.placeCollection.get(placeId);
 
       // Render an empty place with a spinner, it will update on model change
-      createPlaceFormView();
+      createPlaceFormView(place);
 
       place.fetch({
         data: {
@@ -101,6 +118,9 @@ var Surveyor = Surveyor || {};
     },
 
     showView: function(view) {
+      S.currentModel = view.model;
+      S.currentContentView = view;
+
       view.delegateEvents();
       this.$el.html(view.el);
     },
@@ -150,8 +170,46 @@ var Surveyor = Surveyor || {};
     },
 
     events: {
-      'change input, textarea, select': 'updateConditionalFields',
-      'submit form': 'saveSurvey'
+      'change input, textarea, select': 'onInputChanged',
+      'submit form': 'saveSurvey',
+      'click .discard-confirmation .yes-btn': 'discardChanges',
+      'click .discard-confirmation .no-btn': 'comeBack'
+    },
+
+    onInputChanged: function(evt) {
+      var $field = $(evt.target);
+      if ($field.hasClass('survey-input')) {
+        this.isDirty = true;
+      }
+
+      this.updateConditionalFields();
+    },
+
+    confirmLeave: function() {
+      if (this.isDirty) {
+        // Store the path that we were going to, but change the path back to
+        // the one for this form.
+        this.nextPath = Backbone.history.location.pathname;
+        S.router.navigate('/' + this.model.id);
+
+        // Show the confirmation modal.
+        this.$('.discard-confirmation').modal('show');
+
+        // Inform the caller that there's a confirmation necessary.
+        return true;
+
+      } else {
+
+        // Inform the caller tha there's no confirmation necessary.
+        return false;
+      }
+    },
+
+    discardChanges: function() {
+      this.$('form')[0].reset();
+      this.isDirty = false;
+      this.$('.discard-confirmation').modal('hide');
+      S.router.navigate(this.nextPath, {trigger: true});
     },
 
     updateConditionalFields: function() {
@@ -246,11 +304,28 @@ var Surveyor = Surveyor || {};
       this.$('.discard-btn').removeAttr('disabled');
     },
 
+    getSurvey: function() {
+      if (this.survey)
+        return this.survey;
+
+      this.survey = this.model.responseCollection.first();
+      if (this.survey)
+        return this.survey;
+
+      this.survey = this.getPlace().responseCollection.create();
+      return this.survey;
+    },
+
+    getPlace: function() {
+      return this.model;
+    },
+
     saveSurvey: function(evt) {
       evt.preventDefault();
 
       var attrs = this.getAttrs(),
-          survey = this.model.responseCollection.first(),
+          place = this.getPlace(),
+          survey = this.getSurvey(),
           self = this,
           saveOpts = {
             complete: function() {
@@ -262,7 +337,10 @@ var Surveyor = Surveyor || {};
               // On successful save, show the success box and fade it out
               // after a couple of seconds.
               self.$('.survey-save-success').show();
-              _.delay(function() { self.$('.survey-save-success').fadeOut(); }, 2000)
+              _.delay(function() { self.$('.survey-save-success').fadeOut(); }, 2000);
+
+              // Mark the form as clean.
+              self.isDirty = false;
             },
             error: function() {
               // Display a clone of the error modal, in case this view is no
@@ -276,7 +354,7 @@ var Surveyor = Surveyor || {};
       if (survey) {
         survey.save(attrs, saveOpts);
       } else {
-        this.model.responseCollection.create(attrs, saveOpts);
+        place.responseCollection.create(attrs, saveOpts);
       }
     },
 
