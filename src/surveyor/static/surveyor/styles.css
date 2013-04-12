@@ -59,6 +59,12 @@ hr {
   margin-right: -20px;
 }
 
+.form-actions {
+  margin-left: -20px;
+  margin-right: -20px;
+  margin-bottom: 0;
+}
+
 body.splash {
   padding: 0;
 }
@@ -117,6 +123,10 @@ body.splash .navbar {
     text-align: center;
     margin-left: 40px;
     margin-right: 40px;
+  }
+
+  .place-form {
+    margin-bottom: 0;
   }
 }
 
