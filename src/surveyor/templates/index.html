@@ -112,7 +112,6 @@
       S.fetchNearbyPlaces = function(lat, lng) {
         // Fetch new data near this place
         S.placeCollection.fetch({
-          reset: true,
           data: {
             include_submissions: true,
             near: lat+','+lng
@@ -128,7 +127,16 @@
       S.loadSpinner = new Spinner(spinnerOptions);
 
       // Create our place collection
-      S.placeCollection = new Shareabouts.PlaceCollection([], {responseType: 'survey'});
+      S.placeCollection = new Shareabouts.PlaceCollection([], {
+        responseType: 'survey',
+        comparator: function(place) {
+          var dist = place.get('distance');
+          if (_.isString(dist)) {
+            dist = dist.split(' ')[0];
+            return parseFloat(dist);
+          }
+        }
+      });
 
       // Create the router
       S.router = new S.Router({content: '#content'});

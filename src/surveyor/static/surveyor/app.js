@@ -135,6 +135,7 @@ var Surveyor = Surveyor || {};
     initialize: function() {
       this.template = this.options.template;
       this.collection.on('reset', this.render, this);
+      this.collection.on('sort', this.render, this);
     },
 
     prettifyTimes: function() {
