@@ -417,8 +417,12 @@ var Surveyor = Surveyor || {};
     },
 
     initGeolocation: function() {
-      var self = this,
-          currentLocationMarkers = L.layerGroup([]).addTo(self.map);
+      var self = this;
+
+      this.locateControl = L.control.locate({
+        onLocationError: function() {}
+      }).addTo(this.map);
+      this.locateControl._active = true;
 
       var onLocationError = function(evt) {
         var mapOptions = self.options.mapConfig.options,
@@ -448,31 +452,8 @@ var Surveyor = Surveyor || {};
       };
 
       var onLocationFound = function(evt) {
-        var radius = evt.accuracy / 2,
-            msg;
-
-        currentLocationMarkers.clearLayers();
-
-        currentLocationMarkers.addLayer(L.circleMarker(evt.latlng, {
-          radius: 4,
-          weight: 2,
-          color: '#06f',
-          fillOpacity: 1
-        }));
-
-        currentLocationMarkers.addLayer(L.circle(evt.latlng, radius, {
-          weight: 1,
-          color: '#06f',
-          fillOpacity: 0.1
-        }));
-
         self.trigger('locationfound', evt);
       };
-
-      // Add the geolocation control link
-      this.$('.leaflet-top.leaflet-right').append(
-        '<div class="leaflet-control-zoom leaflet-control-locate leaflet-bar leaflet-control"><a class="locate-me leaflet-bar-part" href="#" title="Zoom out"><div>➤</div></a></div>'
-      );
 
       // Bind event handling
       this.map.on('locationerror', onLocationError);
