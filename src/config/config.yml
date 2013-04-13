@@ -17,6 +17,14 @@ map:
     zoom: 14
     minZoom: 10
     maxZoom: 17
+
+    # Disable interaction?
+    dragging: false
+    zoomControl: false
+    touchZoom: false
+    scrollWheelZoom: false
+    doubleClickZoom: false
+    boxZoom: false
   base_layer:
     url: http://{s}.tiles.mapbox.com/v3/openplans.map-dmar86ym/{z}/{x}/{y}.png
     attribution: '&copy; OpenStreetMap contributors, CC-BY-SA. <a href="http://mapbox.com/about/maps" target="_blank">Terms &amp; Feedback</a>'
