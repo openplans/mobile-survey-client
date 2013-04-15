@@ -132,7 +132,9 @@ body.splash .navbar {
   .place-form {
     margin-bottom: 0;
   }
+}
 
+@media (max-width: 979px) and (min-height: 400px) {
   .navbar {
     position: fixed;
     top: 0;
