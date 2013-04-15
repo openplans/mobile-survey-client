@@ -132,6 +132,25 @@ body.splash .navbar {
   .place-form {
     margin-bottom: 0;
   }
+
+  .navbar {
+    position: fixed;
+    top: 0;
+    margin: 0;
+  }
+
+  #top-map {
+    position: fixed;
+    top: 50px;
+    left: 0px;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+
+  body {
+    padding-top: 170px;
+  }
 }
 
 @media (min-width: 980px) {
