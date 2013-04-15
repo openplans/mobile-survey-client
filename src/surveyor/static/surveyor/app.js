@@ -103,7 +103,13 @@ var Surveyor = Surveyor || {};
 
   S.NavbarView = Backbone.View.extend({
     events: {
-      'click a': 'navigate'
+      'click .back-btn': 'goBack',
+      'click a:not(.back-btn)': 'navigate'
+    },
+
+    goBack: function(evt) {
+      evt.preventDefault();
+      Backbone.history.history.back();
     },
 
     navigate: function(evt) {
