@@ -4,6 +4,14 @@ Handlebars.registerHelper('isInput', function(options) {
   }
 });
 
+Handlebars.registerHelper('isFieldset', function(options) {
+  if (this.type === 'fieldset') {
+    return options.fn(this);
+  } else {
+    return options.inverse(this);
+  }
+});
+
 Handlebars.registerHelper('isTextarea', function(options) {
   if (this.type === 'textarea') {
     return options.fn(this);

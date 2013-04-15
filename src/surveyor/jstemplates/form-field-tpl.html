@@ -1,0 +1,55 @@
+{{#isFieldset}}
+
+  <fieldset>
+    {{#if label}}
+      <legend>{{label}}</legend>
+    {{^}}
+      <hr>
+    {{/if}}
+
+    {{#each items}}
+      {{> form-field-tpl }}
+    {{/each}}
+  </fieldset>
+
+{{^}}
+
+  <div class="survey-field survey-field-{{ name }}"{{#condition}} data-condition-field="{{ field }}" data-condition-value="{{ value }}"{{/condition}}>
+
+    <label class="survey-label survey-label-{{ name }}" for="survey-{{ name }}">
+      {{#_}}{{ prompt }}{{# optional }} (optional){{/ optional }}{{/_}}
+    </label>
+
+    <div class="survey-widgets survey-widgets-{{ name }}">
+      {{#isInput}}
+      <input id="survey-{{ name }}" class="survey-input" name="{{ name }}" type="{{ type }}" {{#attrs}} {{ key }}="{{ value }}"{{/attrs}} value="{{value}}">
+      {{/isInput}}
+
+      {{#isTextarea}}
+      <textarea id="survey-{{ name }}" class="survey-input" name="{{ name }}"{{#attrs}} {{ key }}="{{ value }}"{{/attrs}} value="{{value}}"></textarea>
+      {{/isTextarea}}
+
+      {{#isSelect}}
+      <select id="survey-{{ name }}" class="survey-input" name="{{ name }}" type="{{ type }}" {{#attrs}} {{ key }}="{{ value }}"{{/attrs}}>
+        {{#select value}}
+        {{#options}}
+          <option value="{{value}}">{{label}}</option>
+        {{/options}}
+        {{/select}}
+      </select>
+      {{/isSelect}}
+
+      {{#isFile}}
+      <span class="fileinput-container {{^is_fileinput_supported}}disabled{{/is_fileinput_supported}}">
+        <span>{{ inputfile_label }}</span>
+        <input id="place-{{ name }}" class="survey-input" name="{{ name }}" type="{{ type }}" {{#attrs}} {{ key }}="{{ value }}"{{/attrs}}>
+      </span>
+
+      <span class="fileinput-name">
+        {{^isFileInputSupported}}Sorry, your browser doesn't support file uploads.{{/isFileInputSupported}}
+      </span>
+      {{/isFile}}
+    </div>
+  </div>
+
+{{/isFieldset}}

@@ -45,6 +45,7 @@
       var placeListSource = $('#place-list-tpl').html(),
           placeFormSource = $('#place-form-tpl').html(),
           placeItemSource = $('#place-item-tpl').html(),
+          formFieldSource = $('#form-field-tpl').html(),
           spinnerOptions = {
             lines: 13, // The number of lines to draw
             length: 20, // The length of each line
@@ -76,6 +77,7 @@
       };
 
       Handlebars.registerPartial('place-item-tpl', placeItemSource);
+      Handlebars.registerPartial('form-field-tpl', formFieldSource);
       S.placeListTemplate = Handlebars.compile(placeListSource);
       S.placeFormTemplate = Handlebars.compile(placeFormSource);
 
