@@ -32,6 +32,7 @@ STATIC_ROOT = '/home/dotcloud/current/static/'
 # Debug is False by default, true if set in the environment.
 DEBUG = (env.get('DEBUG', 'False') in ['true', 'True'])
 TEMPLATE_DEBUG = DEBUG
+ALLOWED_HOSTS = [env.get('DOTCLOUD_WWW_HTTP_HOST')] + env.get('ALLOWED_HOSTS', '').split(',')
 
 EOF
 
