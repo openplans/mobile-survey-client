@@ -70,6 +70,8 @@ survey:
           value: bar
         - label: _(Restaurant)
           value: restaurant
+        - label: _(Vacant)
+          value: vacant
 
     - prompt: _(Type of Food)
       name: food_type
