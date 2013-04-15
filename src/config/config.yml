@@ -33,8 +33,8 @@ map:
 survey:
   items:
 
-# Business Information
-# --------------------
+# General Business Information
+# ----------------------------
 
     - prompt: _(Business Name)
       type: text
@@ -126,66 +126,71 @@ survey:
 # Merchant Information
 # --------------------
 
-    - prompt: _(Contact Name)
-      type: text
-      name: contact_name
+    - type: fieldset
+      label: _(Merchant Information)
+      items:
+        - prompt: _(Contact Name)
+          type: text
+          name: contact_name
 
-    - prompt: _(Contact Phone Number)
-      type: text
-      name: phone_number
-      attrs:
-        - key: placeholder
-          value: _((___) ___-____)
+        - prompt: _(Contact Phone Number)
+          type: text
+          name: phone_number
+          attrs:
+            - key: placeholder
+              value: _((___) ___-____)
 
-    - prompt: _(Contact Fax Number)
-      type: text
-      name: fax_number
-      attrs:
-        - key: placeholder
-          value: _((___) ___-____ )
+        - prompt: _(Contact Fax Number)
+          type: text
+          name: fax_number
+          attrs:
+            - key: placeholder
+              value: _((___) ___-____ )
 
-    - prompt: _(Email Address)
-      type: text
-      name: email_address
+        - prompt: _(Email Address)
+          type: text
+          name: email_address
 
-    - prompt: _(Number of Employees)
-      type: text
-      name: num_of_employee
+        - prompt: _(Number of Employees)
+          type: text
+          name: num_of_employee
 
-    - prompt: _(Owner Place of Residence)
-      type: text
-      name: owner_residence
+        - prompt: _(Owner Place of Residence)
+          type: text
+          name: owner_residence
 
-    - prompt: _(Opening Date)
-      type: text
-      name: opening_date
+        - prompt: _(Opening Date)
+          type: text
+          name: opening_date
 
-    - prompt: _(Owner Ethnicity)
-      type: select
-      name: ethnicity
-      attrs:
-        - key: multiple
-          value: multiple
-      options:
-        - label: _(Caucasian)
-          value: caucasian
-        - label: _(African American)
-          value: african_american
-        - label: _(Hispanic)
-          value: hispanic
-        - label: _(Asian)
-          value: asian
+        - prompt: _(Owner Ethnicity)
+          type: select
+          name: ethnicity
+          attrs:
+            - key: multiple
+              value: multiple
+          options:
+            - label: _(Caucasian)
+              value: caucasian
+            - label: _(African American)
+              value: african_american
+            - label: _(Hispanic)
+              value: hispanic
+            - label: _(Asian)
+              value: asian
 
-    - prompt: _(Are there any issues with this listing?)
-      type: checkbox
-      name: problems
+    - type: fieldset
+      items:
+        - prompt: _(Are there any issues with this listing?)
+          type: checkbox
+          name: problems
 
-    - prompt: ""
-      type: textarea
-      name: problem_description
-      attrs:
-        - key: placeholder
-          value: _(Note issues with the listing here.)
-      condition:
-        - field: problems
-          value: checked
+        - prompt: ""
+          type: textarea
+          name: problem_description
+          attrs:
+            - key: placeholder
+              value: _(Note issues with the listing here.)
+          condition:
+            - field: problems
+              value: checked
