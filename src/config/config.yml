@@ -19,11 +19,11 @@ map:
     maxZoom: 17
 
     # Disable interaction?
-    dragging: false
+    dragging: true
     zoomControl: false
-    touchZoom: false
+    touchZoom: true
     scrollWheelZoom: false
-    doubleClickZoom: false
+    doubleClickZoom: true
     boxZoom: false
   base_layer:
     url: http://{s}.tiles.mapbox.com/v3/openplans.map-dmar86ym/{z}/{x}/{y}.png
