@@ -71,7 +71,8 @@
         S.placeCollection.fetch({
           data: {
             include_submissions: true,
-            near: lat+','+lng
+            near: lat+','+lng,
+            limit: 100
           }
         });
       };
