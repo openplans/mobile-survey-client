@@ -17,7 +17,7 @@ if __name__ == '__main__':
     api = shareabouts.ShareaboutsApi(root='http://api.shareabouts.org/api/v1/')
     api.authenticate_with_key(args.dskey)
     dataset = api.account('openplans').dataset(args.dataset)
-    places = dataset.places.fetch(visible='all')
+    places = dataset.places.fetch(include_invisible='true')
     places_by_address = {place.get('address'): place for place in places}
 
     with open(args.csvfile, 'rU') as csvfile:
