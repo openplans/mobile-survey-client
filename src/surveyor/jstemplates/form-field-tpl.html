@@ -1,4 +1,4 @@
-{{#isFieldset}}
+{{#ifeq type 'fieldset'}}
 
   <fieldset>
     {{#if label}}
@@ -21,15 +21,26 @@
     </label>
 
     <div class="survey-widgets survey-widgets-{{ name }}">
-      {{#isInput}}
+
+      {{!--
+      {{ The first two conditions check for simple inputs -- ones that use the
+      {{ line text box. This should be those that have no type, and those that
+      {{ don't have one of the special types in the second case.
+      {{
+      {{ The markup they generate should be exactly the same.
+      --}}
+      {{#unless type}}
       <input id="survey-{{ name }}" class="survey-input" name="{{ name }}" type="{{ type }}" {{#attrs}} {{ key }}="{{ value }}"{{/attrs}} value="{{value}}">
-      {{/isInput}}
+      {{/unless}} {{! no input type }}
+      {{#unlessin type 'textarea' 'select' 'file' 'checkbox' 'radio'}}
+      <input id="survey-{{ name }}" class="survey-input" name="{{ name }}" type="{{ type }}" {{#attrs}} {{ key }}="{{ value }}"{{/attrs}} value="{{value}}">
+      {{/unlessin}} {{! not a special input types }}
 
-      {{#isTextarea}}
+      {{#ifeq type 'textarea'}}
       <textarea id="survey-{{ name }}" class="survey-input" name="{{ name }}"{{#attrs}} {{ key }}="{{ value }}"{{/attrs}} value="{{value}}"></textarea>
-      {{/isTextarea}}
+      {{/ifeq}} {{! textarea }}
 
-      {{#isSelect}}
+      {{#ifeq type 'select'}}
       <select id="survey-{{ name }}" class="survey-input" name="{{ name }}" type="{{ type }}" {{#attrs}} {{ key }}="{{ value }}"{{/attrs}}>
         {{#select value}}
         {{#options}}
@@ -37,9 +48,22 @@
         {{/options}}
         {{/select}}
       </select>
-      {{/isSelect}}
+      {{/ifeq}} {{! select }}
 
-      {{#isFile}}
+      {{#ifeq type 'checkbox'}}
+        {{#ifeq style 'switch'}}
+          <div class="switch" data-on-label="{{#_}}{{default on_label 'Yes'}}{{/_}}" data-off-label="{{#_}}{{default off_label 'No'}}{{/_}}">
+            <input type="checkbox" name="{{name}}" id="survey-{{ name }}" {{#if checked}}checked{{/if}} />
+          </div>
+        {{^}}
+          <div class="toggle">
+            <input type="checkbox" name="{{name}}" is="survey-{{name}}" {{#if checked}}checked{{/if}} />
+            <button type="button" class="btn checkbox-btn {{#if checked}}active{{/if}}" data-toggle="button">Test</button>
+          </div>
+        {{/ifeq}}
+      {{/ifeq}} {{! checkbox }}
+
+      {{#ifeq type 'file'}}
       <span class="fileinput-container {{^is_fileinput_supported}}disabled{{/is_fileinput_supported}}">
         <span>{{ inputfile_label }}</span>
         <input id="place-{{ name }}" class="survey-input" name="{{ name }}" type="{{ type }}" {{#attrs}} {{ key }}="{{ value }}"{{/attrs}}>
@@ -48,8 +72,8 @@
       <span class="fileinput-name">
         {{^isFileInputSupported}}Sorry, your browser doesn't support file uploads.{{/isFileInputSupported}}
       </span>
-      {{/isFile}}
+      {{/ifeq}} {{! file }}
     </div>
   </div>
 
-{{/isFieldset}}
+{{/ifeq}} {{!fieldset}}

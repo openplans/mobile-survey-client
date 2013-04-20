@@ -184,6 +184,7 @@ survey:
         - prompt: _(Are there any issues with this listing?)
           type: checkbox
           name: problems
+          style: switch
 
         - prompt: ""
           type: textarea

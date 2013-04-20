@@ -121,6 +121,10 @@ body.splash .navbar {
   display: none;
 }
 
+.toggle input[type="checkbox"] {
+  display: none;
+}
+
 @media (max-width: 979px) {
   .navbar .brand {
     float: none;

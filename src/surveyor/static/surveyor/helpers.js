@@ -1,41 +1,50 @@
-Handlebars.registerHelper('isInput', function(options) {
-  if (!this.type || (this.type !== 'textarea' && this.type !== 'select' && this.type !== 'file')) {
-    return options.fn(this);
-  }
-});
+Helpers = {
+  condition: function(f) {
+    // Return a handlebars block helper function predicated on the condition
+    // function f.
+    return function(/*arg1, arg2, ..., options*/) {
+      var args = _.initial(arguments),
+          options = _.last(arguments);
 
-Handlebars.registerHelper('isFieldset', function(options) {
-  if (this.type === 'fieldset') {
-    return options.fn(this);
-  } else {
-    return options.inverse(this);
-  }
-});
+      if (f.apply(this, args)) {
+        return options.fn(this);
+      } else {
+        return options.inverse(this);
+      }
+    }
+  },
 
-Handlebars.registerHelper('isTextarea', function(options) {
-  if (this.type === 'textarea') {
-    return options.fn(this);
+  inverse: function(f) {
+    // Return a handlebars block helper function predicated the inverse of the
+    // condition function f.
+    var inverseF = function(/*...*/) {
+          return !(f.apply(this, arguments));
+        };
+    return Helpers.condition(inverseF);
   }
-});
+};
 
-Handlebars.registerHelper('isSelect', function(options) {
-  if (this.type === 'select') {
-    return options.fn(this);
-  }
-});
+Conditions = {
+  iseq: function(arg1, arg2) {
+    return arg1 === arg2;
+  },
 
-Handlebars.registerHelper('isFile', function(options) {
-  if (this.type === 'file') {
-    return options.fn(this);
+  isin: function(/*elem, arr[0], arr[1], ...*/) {
+    var elem = _.first(arguments),
+        arr = _.rest(arguments);
+    return _.contains(arr, elem);
   }
-});
+};
 
-Handlebars.registerHelper('isFileInputSupported', function(options) {
-  if (Shareabouts.Util.fileInputSupported()) {
-    return options.fn(this);
-  } else {
-    return options.inverse(this);
-  }
+Handlebars.registerHelper('ifeq', Helpers.condition(Conditions.iseq));
+Handlebars.registerHelper('ifin', Helpers.condition(Conditions.isin));
+Handlebars.registerHelper('unlesseq', Helpers.inverse(Conditions.iseq));
+Handlebars.registerHelper('unlessin', Helpers.inverse(Conditions.isin));
+
+Handlebars.registerHelper('isFileInputSupported', Helpers.condition(Shareabouts.Util.fileInputSupported));
+
+Handlebars.registerHelper('default', function(val, default_val) {
+  return val || default_val;
 });
 
 Handlebars.registerHelper('get', function(attr) {
