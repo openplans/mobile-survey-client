@@ -1,6 +1,6 @@
 {{#ifeq type 'fieldset'}}
 
-  <fieldset>
+  <fieldset class="survey-fieldset survey-fieldset-{{name}}">
     {{#if label}}
       <legend>{{label}}</legend>
     {{^}}
@@ -16,9 +16,11 @@
 
   <div class="survey-field survey-field-{{ name }}"{{#condition}} data-condition-field="{{ field }}" data-condition-value="{{ value }}"{{/condition}}>
 
+    {{#if prompt}}
     <label class="survey-label survey-label-{{ name }}" for="survey-{{ name }}">
       {{#_}}{{ prompt }}{{# optional }} (optional){{/ optional }}{{/_}}
     </label>
+    {{/if}}
 
     <div class="survey-widgets survey-widgets-{{ name }}">
 
@@ -32,7 +34,7 @@
       {{#unless type}}
       <input id="survey-{{ name }}" class="survey-input" name="{{ name }}" type="{{ type }}" {{#attrs}} {{ key }}="{{ value }}"{{/attrs}} value="{{value}}">
       {{/unless}} {{! no input type }}
-      {{#unlessin type 'textarea' 'select' 'file' 'checkbox' 'radio'}}
+      {{#unlessin type 'textarea' 'select' 'file' 'checkbox' 'radio' 'switch' 'toggle'}}
       <input id="survey-{{ name }}" class="survey-input" name="{{ name }}" type="{{ type }}" {{#attrs}} {{ key }}="{{ value }}"{{/attrs}} value="{{value}}">
       {{/unlessin}} {{! not a special input types }}
 
@@ -50,18 +52,18 @@
       </select>
       {{/ifeq}} {{! select }}
 
-      {{#ifeq type 'checkbox'}}
-        {{#ifeq style 'switch'}}
-          <div class="switch" data-on-label="{{#_}}{{default on_label 'Yes'}}{{/_}}" data-off-label="{{#_}}{{default off_label 'No'}}{{/_}}">
-            <input type="checkbox" name="{{name}}" class="survey-input" id="survey-{{ name }}" {{#if checked}}checked{{/if}} />
-          </div>
-        {{^}}
-          <div class="toggle">
-            <input id="survey-{{name}}" class="survey-input" name="{{name}}" type="checkbox" {{#if checked}}checked{{/if}} />
-            <button type="button" class="btn checkbox-btn {{#if checked}}active{{/if}}" data-toggle="button">{{label}}</button>
-          </div>
-        {{/ifeq}}
-      {{/ifeq}} {{! checkbox }}
+      {{#ifeq type 'switch'}}
+        <div class="switch" data-on-label="{{#_}}{{default on_label 'Yes'}}{{/_}}" data-off-label="{{#_}}{{default off_label 'No'}}{{/_}}">
+          <input type="checkbox" name="{{name}}" class="survey-input" id="survey-{{ name }}" {{#if checked}}checked{{/if}} />
+        </div>
+      {{/ifeq}} {{! switch }}
+
+      {{#ifeq type 'toggle'}}
+        <div class="toggle">
+          <input id="survey-{{name}}" class="survey-input" name="{{name}}" type="checkbox" {{#if checked}}checked{{/if}} />
+          <button type="button" class="btn checkbox-btn {{#if checked}}active{{/if}}" data-toggle="button">{{label}}</button>
+        </div>
+      {{/ifeq}} {{! toggle }}
 
       {{#ifeq type 'file'}}
       <span class="fileinput-container {{^is_fileinput_supported}}disabled{{/is_fileinput_supported}}">
