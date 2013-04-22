@@ -218,6 +218,46 @@ var Surveyor = Surveyor || {};
       S.router.navigate(this.nextPath, {trigger: true});
     },
 
+    isConditionSatisfied: function($field) {
+      var conditionField = $field.attr('data-condition-field'),
+          conditionValue = $field.attr('data-condition-value'),
+          $conditionField;
+
+      if (!conditionField) {
+        // When there is no condition to be satisfied, just return true.
+        return true;
+      }
+
+      // Get the field that this field depends on
+      $conditionField = this.$('[name="' + conditionField + '"]');
+
+      if (!this.isConditionSatisfied($conditionField.closest('.survey-field'))) {
+        // All fields that this field depends on must also be satisfied.
+        return false;
+      }
+
+      switch ($conditionField.attr('type')) {
+        // Checkboxes are special. Their value is always 'on', so check
+        // whether it's checked instead.
+        case 'checkbox':
+          if (($conditionField.is(':checked') && conditionValue === 'checked') ||
+              ($conditionField.is(':not(:checked)') && conditionValue === 'unchecked')) {
+            return true;
+          } else {
+            return false;
+          }
+          break;
+
+        // For everything else, just check that the value matches.
+        default:
+          if ($conditionField.val() === conditionValue) {
+            return true;
+          } else {
+            return false;
+          }
+      }
+    },
+
     updateConditionalFields: function() {
       var self = this;
 
@@ -225,35 +265,12 @@ var Surveyor = Surveyor || {};
       // condition-field data attribute, then only show it if the value of that
       // field is equal to the condition-value data attribute.
       self.$('.survey-field').each(function(i, field) {
-        var $field = $(field),
-            conditionField = $field.attr('data-condition-field'),
-            conditionValue = $field.attr('data-condition-value'),
-            $conditionField;
+        var $field = $(field);
 
-        if (conditionField) {
-          // Get the field that this field depends on
-          $conditionField = self.$('[name="' + conditionField + '"]');
-
-          switch ($conditionField.attr('type')) {
-            // Checkboxes are special. Their value is always 'on', so check
-            // whether it's checked instead.
-            case 'checkbox':
-              if (($conditionField.is(':checked') && conditionValue === 'checked') ||
-                  ($conditionField.is(':not(:checked)') && conditionValue === 'unchecked')) {
-                $field.show();
-              } else {
-                $field.hide();
-              }
-              break;
-
-            // For everything else, just check that the value matches.
-            default:
-              if ($conditionField.val() === conditionValue) {
-                $field.show();
-              } else {
-                $field.hide();
-              }
-          }
+        if (self.isConditionSatisfied($field)) {
+          $field.show();
+        } else {
+          $field.hide();
         }
       });
     },

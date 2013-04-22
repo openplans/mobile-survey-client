@@ -12,18 +12,18 @@ map:
   geolocation_enabled: true
   options:
     center:
-      lat: 39.9523524
-      lng: -75.1636075
+      lat: 40.7267
+      lng: -73.9808
     zoom: 14
     minZoom: 10
     maxZoom: 17
 
     # Disable interaction?
-    dragging: false
+    dragging: true
     zoomControl: false
-    touchZoom: false
+    touchZoom: true
     scrollWheelZoom: false
-    doubleClickZoom: false
+    doubleClickZoom: true
     boxZoom: false
   base_layer:
     url: http://{s}.tiles.mapbox.com/v3/openplans.map-dmar86ym/{z}/{x}/{y}.png
@@ -32,27 +32,18 @@ map:
 
 survey:
   items:
+
+# General Business Information
+# ----------------------------
+
     - prompt: _(Business Name)
       type: text
       name: business_name
-    - prompt: _(Contact Name)
-      type: text
-      name: contact_name
-    - prompt: _(Phone Number)
-      type: text
-      name: phone_number
-      attrs:
-        - key: placeholder
-          value: _((___) ___-____)
-    - prompt: _(Fax Number)
-      type: text
-      name: fax_number
-      attrs:
-        - key: placeholder
-          value: _((___) ___-____ )
-    - prompt: _(Email Address)
-      type: text
-      name: email_address
+
+    - prompt: _(Hours of Operation)
+      type: textarea
+      name: hours
+
     - prompt: _(Web Address)
       type: text
       name: web_address
@@ -64,14 +55,59 @@ survey:
       name: business_type
       type: select
       options:
+        - label: _(Vacant)
+          value: vacant
         - label: _(Retail)
           value: retail
         - label: _(Bar)
           value: bar
         - label: _(Restaurant)
           value: restaurant
-        - label: _(Vacant)
-          value: vacant
+        - label: _(Service Business)
+          value: service
+        - label: _(Bank)
+          value: bank
+        - label: _(Grocery Store)
+          value: grocery
+        - label: _(Deli/Bodega)
+          value: deli
+        - label: _(Newspaper Stand)
+          value: newspapers
+        - label: _(Religious)
+          value: religious
+        - label: _(Cultural)
+          value: cultural
+        - label: _(Residential)
+          value: residential
+        - label: _(Other)
+          value: other
+
+    - prompt: _(What is sold?)
+      name: retail_type
+      condition:
+        - field: business_type
+          value: retail
+      type: select
+      options:
+        - label: _(Clothing)
+          value: clothing
+        - label: _(Medical/Alternative Medicine)
+          value: medical
+        - label: _(Arts & Design)
+          value: arts_design
+        - label: _(Gifts)
+          value: gifts
+        - label: _(Jewelry)
+          value: jewelry
+        - label: _(Other)
+          value: other
+
+    - prompt: _(Other retail...)
+      name: retail_type_other
+      condition:
+        - field: retail_type
+          value: other
+      type: text
 
     - prompt: _(Type of Food)
       name: food_type
@@ -80,40 +116,81 @@ survey:
         - field: business_type
           value: restaurant
 
-    - prompt: _(What is sold?)
-      name: merch_type
-      type: text
+    - prompt: _(Type of service offered)
+      name: service_type
       condition:
         - field: business_type
-          value: retail
+          value: service
+      type: text
 
-    - prompt: _(Ethnicity)
-      type: select
-      name: ethnicity
-      optional: true
-      attrs:
-        - key: multiple
-          value: multiple
-      options:
-        - label: _(Caucasian)
-          value: caucasian
-        - label: _(African American)
-          value: african_american
-        - label: _(Hispanic)
-          value: hispanic
-        - label: _(Asian)
-          value: asian
+# Merchant Information
+# --------------------
 
-    - prompt: _(Are there any issues with this listing?)
-      type: checkbox
-      name: problems
+    - type: fieldset
+      label: _(Merchant Information)
+      items:
+        - prompt: _(Contact Name)
+          type: text
+          name: contact_name
 
-    - prompt: ""
-      type: textarea
-      name: problem_description
-      attrs:
-        - key: placeholder
-          value: _(Note issues with the listing here.)
-      condition:
-        - field: problems
-          value: checked
+        - prompt: _(Contact Phone Number)
+          type: text
+          name: phone_number
+          attrs:
+            - key: placeholder
+              value: _((___) ___-____)
+
+        - prompt: _(Contact Fax Number)
+          type: text
+          name: fax_number
+          attrs:
+            - key: placeholder
+              value: _((___) ___-____ )
+
+        - prompt: _(Email Address)
+          type: text
+          name: email_address
+
+        - prompt: _(Number of Employees)
+          type: text
+          name: num_of_employee
+
+        - prompt: _(Owner Place of Residence)
+          type: text
+          name: owner_residence
+
+        - prompt: _(Opening Date)
+          type: text
+          name: opening_date
+
+        - prompt: _(Owner Ethnicity)
+          type: select
+          name: ethnicity
+          attrs:
+            - key: multiple
+              value: multiple
+          options:
+            - label: _(Caucasian)
+              value: caucasian
+            - label: _(African American)
+              value: african_american
+            - label: _(Hispanic)
+              value: hispanic
+            - label: _(Asian)
+              value: asian
+
+    - type: fieldset
+      items:
+        - prompt: _(Are there any issues with this listing?)
+          type: checkbox
+          name: problems
+
+        - prompt: ""
+          type: textarea
+          name: problem_description
+          attrs:
+            - key: placeholder
+              value: _(Note issues with the listing here.)
+          condition:
+            - field: problems
+              value: checked
