@@ -125,6 +125,24 @@ body.splash .navbar {
   display: none;
 }
 
+/*
+ * Bootstrap uses a class*="span" selector, which matches "hispanic", so we
+ * resetit here.
+ */
+.survey-field-owner_is_hispanic,
+.survey-label-owner_is_hispanic,
+.survey-widgets-owner_is_hispanic {
+  float: none;
+  min-height: auto;
+  margin-left: auto;
+  width: auto;
+}
+
+.survey-fieldset-owner_identity .survey-field {
+  float: left;
+  margin: 3px;
+}
+
 @media (max-width: 979px) {
   .navbar .brand {
     float: none;
