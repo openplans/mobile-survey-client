@@ -365,11 +365,18 @@ var Surveyor = Surveyor || {};
               // longer displayed.
               self.$('.survey-save-error').clone().modal('show');
             }
-          };
+          },
+          attr;
 
       this.startSave();
 
       if (survey) {
+        for (attr in survey.attributes) {
+          if (attr !== 'id' && !_.has(attrs, attr)) {
+            survey.unset(attr);
+          }
+        }
+
         survey.save(attrs, saveOpts);
         S.currentUser = attrs['submitter_name'];
       } else {
