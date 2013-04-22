@@ -377,6 +377,17 @@ var Surveyor = Surveyor || {};
       }
     },
 
+    initializeFieldSet: function(fieldset, surveyData) {
+      var self = this;
+      _.each(fieldset.items, function(item) {
+        if (item.type === 'fieldset') {
+          self.initializeFieldSet(item, surveyData);
+        } else {
+          item.value = surveyData[item.name];
+        }
+      });
+    },
+
     render: function() {
      var placeData,
          survey,
@@ -390,9 +401,7 @@ var Surveyor = Surveyor || {};
         surveyData = (survey ? survey.toJSON() : {});
         surveyConfig = S.config.survey;
 
-        _.each(surveyConfig.items, function(item) {
-          item.value = surveyData[item.name];
-        });
+        this.initializeFieldSet(surveyConfig, surveyData);
 
         html = this.template({place: placeData, survey: surveyData, survey_config: surveyConfig});
         this.$el.html(html);
