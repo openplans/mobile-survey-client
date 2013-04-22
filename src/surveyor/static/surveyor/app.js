@@ -413,12 +413,7 @@ var Surveyor = Surveyor || {};
       this.$('.toggle button').on('click', function() {
         var $btn = $(this),
             $checkbox = $btn.siblings('input[type="checkbox"]');
-
-        if (!$btn.hasClass('active')) {
-          $checkbox.attr('checked', 'checked');
-        } else {
-          $checkbox.removeAttr('checked');
-        }
+        $checkbox.click();
       });
 
       return this;

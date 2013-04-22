@@ -53,12 +53,12 @@
       {{#ifeq type 'checkbox'}}
         {{#ifeq style 'switch'}}
           <div class="switch" data-on-label="{{#_}}{{default on_label 'Yes'}}{{/_}}" data-off-label="{{#_}}{{default off_label 'No'}}{{/_}}">
-            <input type="checkbox" name="{{name}}" id="survey-{{ name }}" {{#if checked}}checked{{/if}} />
+            <input type="checkbox" name="{{name}}" class="survey-input" id="survey-{{ name }}" {{#if checked}}checked{{/if}} />
           </div>
         {{^}}
           <div class="toggle">
-            <input type="checkbox" name="{{name}}" is="survey-{{name}}" {{#if checked}}checked{{/if}} />
-            <button type="button" class="btn checkbox-btn {{#if checked}}active{{/if}}" data-toggle="button">Test</button>
+            <input id="survey-{{name}}" class="survey-input" name="{{name}}" type="checkbox" {{#if checked}}checked{{/if}} />
+            <button type="button" class="btn checkbox-btn {{#if checked}}active{{/if}}" data-toggle="button">{{label}}</button>
           </div>
         {{/ifeq}}
       {{/ifeq}} {{! checkbox }}
