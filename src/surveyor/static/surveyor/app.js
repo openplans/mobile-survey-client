@@ -414,6 +414,7 @@ var Surveyor = Surveyor || {};
         var $btn = $(this),
             $checkbox = $btn.siblings('input[type="checkbox"]');
         $checkbox.click();
+        $btn.toggleClass('btn-primary');
       });
 
       return this;
