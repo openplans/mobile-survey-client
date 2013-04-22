@@ -165,7 +165,7 @@ survey:
           name: opening_date
 
         - prompt: _(Owner Place of Residence)
-          type: text
+          type: textarea
           name: owner_residence
 
         - label: _(Owner identifies as...)
