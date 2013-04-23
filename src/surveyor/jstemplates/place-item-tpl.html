@@ -1,6 +1,6 @@
-<div class="place place-{{id}} row">
-  <div class="span6">
-    <a href="/{{id}}" class="address place-form-link">{{get 'address'}}</a>
+<li class="place place-{{id}}">
+  <a href="/{{id}}" class="address place-form-link">
+    {{get 'address'}}
     <span class="last-survey">
       {{#if_has_been_surveyed}}
         {{#_}}Last surveyed <time datetime="{{last_surveyed_at}}">{{last_surveyed_at}}</time> by {{last_surveyed_by}}{{/_}}
@@ -8,7 +8,5 @@
         {{#_}}Never been surveyed{{/_}}
       {{/if_has_been_surveyed}}
     </span>
-  </div>
-</div>
-
-<hr>
+  </a>
+</li>
