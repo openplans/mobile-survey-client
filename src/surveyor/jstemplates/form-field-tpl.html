@@ -1,6 +1,6 @@
-{{#isFieldset}}
+{{#ifeq type 'fieldset'}}
 
-  <fieldset>
+  <fieldset class="survey-fieldset survey-fieldset-{{name}}">
     {{#if label}}
       <legend>{{label}}</legend>
     {{^}}
@@ -16,20 +16,33 @@
 
   <div class="survey-field survey-field-{{ name }}"{{#condition}} data-condition-field="{{ field }}" data-condition-value="{{ value }}"{{/condition}}>
 
+    {{#if prompt}}
     <label class="survey-label survey-label-{{ name }}" for="survey-{{ name }}">
       {{#_}}{{ prompt }}{{# optional }} (optional){{/ optional }}{{/_}}
     </label>
+    {{/if}}
 
     <div class="survey-widgets survey-widgets-{{ name }}">
-      {{#isInput}}
+
+      {{!--
+      {{ The first two conditions check for simple inputs -- ones that use the
+      {{ line text box. This should be those that have no type, and those that
+      {{ don't have one of the special types in the second case.
+      {{
+      {{ The markup they generate should be exactly the same.
+      --}}
+      {{#unless type}}
       <input id="survey-{{ name }}" class="survey-input" name="{{ name }}" type="{{ type }}" {{#attrs}} {{ key }}="{{ value }}"{{/attrs}} value="{{value}}">
-      {{/isInput}}
+      {{/unless}} {{! no input type }}
+      {{#unlessin type 'textarea' 'select' 'file' 'checkbox' 'radio' 'switch' 'toggle'}}
+      <input id="survey-{{ name }}" class="survey-input" name="{{ name }}" type="{{ type }}" {{#attrs}} {{ key }}="{{ value }}"{{/attrs}} value="{{value}}">
+      {{/unlessin}} {{! not a special input types }}
 
-      {{#isTextarea}}
+      {{#ifeq type 'textarea'}}
       <textarea id="survey-{{ name }}" class="survey-input" name="{{ name }}"{{#attrs}} {{ key }}="{{ value }}"{{/attrs}} value="{{value}}"></textarea>
-      {{/isTextarea}}
+      {{/ifeq}} {{! textarea }}
 
-      {{#isSelect}}
+      {{#ifeq type 'select'}}
       <select id="survey-{{ name }}" class="survey-input" name="{{ name }}" type="{{ type }}" {{#attrs}} {{ key }}="{{ value }}"{{/attrs}}>
         {{#select value}}
         {{#options}}
@@ -37,9 +50,26 @@
         {{/options}}
         {{/select}}
       </select>
-      {{/isSelect}}
+      {{/ifeq}} {{! select }}
 
-      {{#isFile}}
+      {{#ifeq type 'checkbox'}}
+        <input type="checkbox" name="{{name}}" class="survey-input" id="survey-{{ name }}" {{#if value}}checked{{/if}} />
+      {{/ifeq}} {{! switch }}
+
+      {{#ifeq type 'switch'}}
+        <div class="switch" data-on-label="{{#_}}{{default on_label 'Yes'}}{{/_}}" data-off-label="{{#_}}{{default off_label 'No'}}{{/_}}">
+          <input type="checkbox" name="{{name}}" class="survey-input" id="survey-{{ name }}" {{#if value}}checked{{/if}} />
+        </div>
+      {{/ifeq}} {{! switch }}
+
+      {{#ifeq type 'toggle'}}
+        <div class="toggle">
+          <input id="survey-{{name}}" class="survey-input" name="{{name}}" type="checkbox" {{#if value}}checked{{/if}} />
+          <button type="button" class="btn checkbox-btn {{#if value}}btn-primary active{{/if}}" data-toggle="button">{{label}}</button>
+        </div>
+      {{/ifeq}} {{! toggle }}
+
+      {{#ifeq type 'file'}}
       <span class="fileinput-container {{^is_fileinput_supported}}disabled{{/is_fileinput_supported}}">
         <span>{{ inputfile_label }}</span>
         <input id="place-{{ name }}" class="survey-input" name="{{ name }}" type="{{ type }}" {{#attrs}} {{ key }}="{{ value }}"{{/attrs}}>
@@ -48,8 +78,8 @@
       <span class="fileinput-name">
         {{^isFileInputSupported}}Sorry, your browser doesn't support file uploads.{{/isFileInputSupported}}
       </span>
-      {{/isFile}}
+      {{/ifeq}} {{! file }}
     </div>
   </div>
 
-{{/isFieldset}}
+{{/ifeq}} {{!fieldset}}

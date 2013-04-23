@@ -40,17 +40,6 @@ survey:
       type: text
       name: business_name
 
-    - prompt: _(Hours of Operation)
-      type: textarea
-      name: hours
-
-    - prompt: _(Web Address)
-      type: text
-      name: web_address
-      attrs:
-        - key: placeholder
-          value: 'http://'
-
     - prompt: _(Type of Business)
       name: business_type
       type: select
@@ -123,11 +112,20 @@ survey:
           value: service
       type: text
 
+    - prompt: _(Wheelchair accessible?)
+      name: wheelchair_accessible
+      type: switch
+
+    - prompt: _(Hours of Operation)
+      type: textarea
+      name: hours
+
 # Merchant Information
 # --------------------
 
     - type: fieldset
       label: _(Merchant Information)
+      name: merchant_information
       items:
         - prompt: _(Contact Name)
           type: text
@@ -151,38 +149,53 @@ survey:
           type: text
           name: email_address
 
-        - prompt: _(Number of Employees)
+        - prompt: _(Web Address)
           type: text
+          name: web_address
+          attrs:
+            - key: placeholder
+              value: 'http://'
+
+        - prompt: _(Number of Employees)
+          type: number
           name: num_of_employee
 
-        - prompt: _(Owner Place of Residence)
-          type: text
-          name: owner_residence
-
         - prompt: _(Opening Date)
-          type: text
+          type: date
           name: opening_date
 
-        - prompt: _(Owner Ethnicity)
-          type: select
-          name: ethnicity
-          attrs:
-            - key: multiple
-              value: multiple
-          options:
-            - label: _(Caucasian)
-              value: caucasian
-            - label: _(African American)
-              value: african_american
-            - label: _(Hispanic)
-              value: hispanic
-            - label: _(Asian)
-              value: asian
+        - prompt: _(Owner Place of Residence)
+          type: textarea
+          name: owner_residence
+
+        - label: _(Owner identifies as...)
+          type: fieldset
+          name: owner_identity
+          items:
+            - type: toggle
+              label: _(Caucasian)
+              name: owner_is_caucasian
+            - type: toggle
+              label: _(African American)
+              name: owner_is_african_american
+            - type: toggle
+              label: _(Hispanic)
+              name: owner_is_hispanic
+            - type: toggle
+              label: _(Asian)
+              name: owner_is_asian
+            - type: toggle
+              label: _(Veteran)
+              name: owner_is_veteran
+            - type: toggle
+              label: _(Female)
+              name: owner_is_female
 
     - type: fieldset
+      name: listing_issues
       items:
         - prompt: _(Are there any issues with this listing?)
-          type: checkbox
+          type: switch
           name: problems
 
         - prompt: ""

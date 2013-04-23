@@ -365,16 +365,34 @@ var Surveyor = Surveyor || {};
               // longer displayed.
               self.$('.survey-save-error').clone().modal('show');
             }
-          };
+          },
+          attr;
 
       this.startSave();
 
       if (survey) {
+        for (attr in survey.attributes) {
+          if (attr !== 'id' && !_.has(attrs, attr)) {
+            survey.unset(attr);
+          }
+        }
+
         survey.save(attrs, saveOpts);
         S.currentUser = attrs['submitter_name'];
       } else {
         place.responseCollection.create(attrs, saveOpts);
       }
+    },
+
+    initializeFieldSet: function(fieldset, surveyData) {
+      var self = this;
+      _.each(fieldset.items, function(item) {
+        if (item.type === 'fieldset') {
+          self.initializeFieldSet(item, surveyData);
+        } else {
+          item.value = surveyData[item.name];
+        }
+      });
     },
 
     render: function() {
@@ -390,9 +408,7 @@ var Surveyor = Surveyor || {};
         surveyData = (survey ? survey.toJSON() : {});
         surveyConfig = S.config.survey;
 
-        _.each(surveyConfig.items, function(item) {
-          item.value = surveyData[item.name];
-        });
+        this.initializeFieldSet(surveyConfig, surveyData);
 
         html = this.template({place: placeData, survey: surveyData, survey_config: surveyConfig});
         this.$el.html(html);
@@ -406,6 +422,16 @@ var Surveyor = Surveyor || {};
         // Show a spinner
         S.loadSpinner.spin(this.el);
       }
+
+      this.$('.switch').bootstrapSwitch();
+
+      // Take all the toggle check boxes and turn them into buttons
+      this.$('.toggle button').on('click', function() {
+        var $btn = $(this),
+            $checkbox = $btn.siblings('input[type="checkbox"]');
+        $checkbox.click();
+        $btn.toggleClass('btn-primary');
+      });
 
       return this;
     }
