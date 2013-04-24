@@ -19,6 +19,8 @@ body {
   float: none;
   margin-left: 50px;
   margin-right: 50px;
+  padding-right: 2em;
+  padding-left: 4em;
 }
 
 .logo-tripod,
@@ -27,7 +29,7 @@ body {
   position: absolute;
   left: 50%;
   top: 50%;
-  margin-left: -2.25em;
+  margin-left: -1.125em;
   height: 0.6em;
   width: 0.1em;
   border-radius: 0.1em;
