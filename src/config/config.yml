@@ -150,7 +150,7 @@ survey:
           name: email_address
 
         - prompt: _(Web Address)
-          type: url
+          type: text
           name: web_address
           attrs:
             - key: placeholder
