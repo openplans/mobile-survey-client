@@ -190,7 +190,7 @@ var Surveyor = Surveyor || {};
 
     events: {
       'change input, textarea, select': 'onInputChanged',
-      'submit form': 'saveSurvey',
+      'submit form': 'onFormSubmit',
       'click .discard-confirmation .yes-btn': 'discardChanges'
     },
 
@@ -350,9 +350,33 @@ var Surveyor = Surveyor || {};
       return this.model;
     },
 
-    saveSurvey: function(evt) {
+    invalidInput: function() {
+      var firstInvalidEl;
+
+      this.$('form').find('input, select, textarea').each(function(i, el) {
+        if (!el.validity.valid) {
+          firstInvalidEl = el;
+          return false;
+        }
+      });
+
+      return firstInvalidEl;
+    },
+
+    onFormSubmit: function(evt) {
       evt.preventDefault();
 
+      // Validate manually, in case HTML5 validation doesn't happen
+      var firstInvalidEl = this.invalidInput();
+
+      if (firstInvalidEl) {
+        $(firstInvalidEl).focus();
+      } else {
+        this.saveSurvey();
+      }
+    },
+
+    saveSurvey: function() {
       var attrs = this.getAttrs(),
           place = this.getPlace(),
           survey = this.getSurvey(),
