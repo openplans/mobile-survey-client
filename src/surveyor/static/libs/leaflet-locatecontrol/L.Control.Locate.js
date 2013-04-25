@@ -48,8 +48,6 @@ L.Control.Locate = L.Control.extend({
         }, this.options.locateOptions), {
             'watch': true  // if you overwrite this, visualization cannot be updated
         });
-        this._locateOnNextLocationFound = false;
-        this._active = false;
 
         var link = L.DomUtil.create('a', 'leaflet-bar-part', container);
         link.href = '#';
@@ -87,6 +85,8 @@ L.Control.Locate = L.Control.extend({
         var onLocationFound = function (e) {
             _log('onLocationFound');
 
+            self._active = true;
+
             if (self._event &&
                 (self._event.latlng.lat != e.latlng.lat ||
                  self._event.latlng.lng != e.latlng.lng)) {
@@ -94,10 +94,6 @@ L.Control.Locate = L.Control.extend({
             }
 
             self._event = e;
-
-            if (!self._active) {
-                return;
-            }
 
             if (self.options.follow) {
                 self._locateOnNextLocationFound = true;
@@ -144,14 +140,23 @@ L.Control.Locate = L.Control.extend({
             self._container.className = classNames + " active";
         };
 
+        var resetVariables = function() {
+            self._active = false;
+            self._locateOnNextLocationFound = true;
+        };
+
+        resetVariables();
+
         var stopLocate = function() {
+            _log('stopLocate');
             map.stopLocate();
 
             self._container.className = classNames;
-            self._active = false;
+            resetVariables();
 
             self._layer.clearLayers();
         };
+
 
         var onLocationError = function (err) {
             _log('onLocationError');
@@ -160,8 +165,6 @@ L.Control.Locate = L.Control.extend({
             if (err.code==3 && this._locateOptions.watch) {
                 return;
             }
-
-            self._container.className = classNames;
 
             stopLocate();
             self.options.onLocationError(err);
