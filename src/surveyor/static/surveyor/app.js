@@ -332,15 +332,11 @@ var Surveyor = Surveyor || {};
 
       // Disable the save button
       this.$('.save-btn').attr('disabled', 'disabled');
-
-      // Disable the discard button
-      this.$('.discard-btn').attr('disabled', 'disabled');
     },
 
     finishSave: function() {
       this.$('.survey-save-inprogress').hide();
       this.$('.save-btn').removeAttr('disabled');
-      this.$('.discard-btn').removeAttr('disabled');
     },
 
     getSurvey: function() {
