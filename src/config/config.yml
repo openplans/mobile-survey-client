@@ -132,25 +132,25 @@ survey:
           name: contact_name
 
         - prompt: _(Contact Phone Number)
-          type: text
+          type: tel
           name: phone_number
           attrs:
             - key: placeholder
               value: _((___) ___-____)
 
         - prompt: _(Contact Fax Number)
-          type: text
+          type: tel
           name: fax_number
           attrs:
             - key: placeholder
               value: _((___) ___-____ )
 
         - prompt: _(Email Address)
-          type: text
+          type: email
           name: email_address
 
         - prompt: _(Web Address)
-          type: text
+          type: url
           name: web_address
           attrs:
             - key: placeholder
