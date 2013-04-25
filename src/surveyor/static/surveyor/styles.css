@@ -114,8 +114,6 @@ body {
   margin-top: -20px;
 }
 .place-list li {
-  margin-right: -20px;
-  margin-left: -20px;
   border-top: 1px solid #eee;
 }
 .place-list li:first-child {
@@ -173,11 +171,17 @@ a.address {
 }
 
 #content {
-  position: relative;
   background: #fff;
   margin: 100px -20px 0;
-  padding: 20px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.place-list,
+.place-form {
+  position: relative;
+  z-index: 1029;
+  background: #fff;
+  padding: 20px;
 }
 
 #top-map {
