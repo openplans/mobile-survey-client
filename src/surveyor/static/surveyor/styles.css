@@ -3,7 +3,7 @@
   top: 0;
   margin: 0;
 }
-.navbar-fixed-top .navbar-inner, 
+.navbar-fixed-top .navbar-inner,
 .navbar-static-top .navbar-inner {
   text-align: center;
   background: #47a;
@@ -47,13 +47,13 @@ body {
           transform: rotate(25deg);
   -webkit-transform-origin: 50% 0%;
       -ms-transform-origin: 50% 0%;
-          transform-origin: 50% 0%;  
+          transform-origin: 50% 0%;
 }
 .logo-tripod:after {
   -webkit-transform: rotate(-25deg);
       -ms-transform: rotate(-25deg);
           transform: rotate(-25deg);
-  
+
 }
 .logo-theodolite {
   position: absolute;
@@ -80,7 +80,7 @@ body {
   height: 0.1em;
   width: 0.2em;
   border-radius: 0.1em;
-  box-shadow: 
+  box-shadow:
   0.25em 0 0 rgba(255,255,255,0.6),
   0.5em 0 0 rgba(255,255,255,0.55),
   0.75em 0 0 rgba(255,255,255,0.4),
@@ -114,8 +114,6 @@ body {
   margin-top: -20px;
 }
 .place-list li {
-  margin-right: -20px;
-  margin-left: -20px;
   border-top: 1px solid #eee;
 }
 .place-list li:first-child {
@@ -173,14 +171,19 @@ a.address {
 }
 
 #content {
-  position: relative;
   background: #fff;
   margin: 100px -20px 0;
-  padding: 20px;
-  z-index: 1029;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
-  
+
+.place-list,
+.place-form {
+  position: relative;
+  z-index: 1029;
+  background: #fff;
+  padding: 20px;
+}
+
 #top-map {
   position: fixed;
   height: 100px;

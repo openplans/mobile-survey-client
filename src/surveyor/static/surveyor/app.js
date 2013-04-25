@@ -129,6 +129,7 @@ var Surveyor = Surveyor || {};
 
       view.delegateEvents();
       this.$el.html(view.el);
+      $(window).scrollTop(view.getScrollTop());
     },
 
     navigate: function(evt) {
@@ -142,6 +143,17 @@ var Surveyor = Surveyor || {};
       this.template = this.options.template;
       this.collection.on('reset', this.render, this);
       this.collection.on('sort', this.render, this);
+      this.scrollTop = 0;
+
+      $(window).scroll(_.bind(this.onScroll, this));
+    },
+
+    onScroll: function() {
+      this.scrollTop = $(window).scrollTop();
+    },
+
+    getScrollTop: function() {
+      return this.scrollTop;
     },
 
     prettifyTimes: function() {
@@ -180,6 +192,10 @@ var Surveyor = Surveyor || {};
       'change input, textarea, select': 'onInputChanged',
       'submit form': 'saveSurvey',
       'click .discard-confirmation .yes-btn': 'discardChanges'
+    },
+
+    getScrollTop: function() {
+      return 0;
     },
 
     onInputChanged: function(evt) {

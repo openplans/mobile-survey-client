@@ -1,11 +1,11 @@
 # Settings for the app
 app:
   # HTML Title
-  title: Shareabouts
+  title: CB3 Survey
   # Header name
-  name: Shareabouts
+  name: CB3 Survey
   # Meta description that will show up in Google search results
-  meta_description: _(Shareabouts is a mapping tool to gather crowd sourced public input. Use it to collect suggested locations and comments in a social, engaging process.)
+  meta_description: _(Surveyor is a tool for collecting business local information)
 
 # Settings for map and layer configs
 map:
@@ -132,25 +132,25 @@ survey:
           name: contact_name
 
         - prompt: _(Contact Phone Number)
-          type: text
+          type: tel
           name: phone_number
           attrs:
             - key: placeholder
               value: _((___) ___-____)
 
         - prompt: _(Contact Fax Number)
-          type: text
+          type: tel
           name: fax_number
           attrs:
             - key: placeholder
               value: _((___) ___-____ )
 
         - prompt: _(Email Address)
-          type: text
+          type: email
           name: email_address
 
         - prompt: _(Web Address)
-          type: text
+          type: url
           name: web_address
           attrs:
             - key: placeholder
