@@ -164,8 +164,8 @@ survey:
           type: month
           name: opening_date
           attrs:
-            key: pattern
-            value: '^\d{1,4}[\/-]\d{1,4}$'
+            key: placeholder
+            value: 'YYYY-MM'
 
         - prompt: _(Owner Place of Residence)
           type: textarea
