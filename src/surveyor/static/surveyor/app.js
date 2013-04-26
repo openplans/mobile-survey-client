@@ -134,7 +134,11 @@ var Surveyor = Surveyor || {};
 
     navigate: function(evt) {
       evt.preventDefault();
-      S.router.navigate(evt.target.getAttribute('href'), {trigger: true});
+
+      // The event target may be a child of the anchor, so get the nearest
+      // anchor ancestor.
+      var $a = $(evt.target).closest('a');
+      S.router.navigate($a.attr('href'), {trigger: true});
     }
   });
 
