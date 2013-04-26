@@ -165,11 +165,48 @@ var Surveyor = Surveyor || {};
     },
 
     render: function() {
-      var data, html;
+      var data, html,
+          placeOrdering = function(place) {
+            // Return an array representation of a place's address for sorting
+            // purposes. The array will be of the form [street, unit]. A unit
+            // is assumed to begin with a digit.
+            var address = place.get('address'),
+                parts = /^(\d[^\s]*)\s+(.*)$/.exec(address),
+                unit, street,
+                processUnit = function(unitString) {
+                  var pattern = /^(\d+)([^\d]*)(.*)$/,
+                      subparts = pattern.exec(unitString),
+                      unitParts;
+
+                  if (subparts === null) {
+                    unitParts = [unitString];
+                  } else {
+                    unitParts = [parseInt(subparts[1])];
+                    if (subparts[2]) unitParts.push(subparts[2]);
+                    if (subparts[3]) unitParts = unitParts.concat(placeOrdering(subparts[3]));
+                  }
+
+                  return unitParts;
+                };
+
+            if (parts === null) {
+              street = address;
+            } else {
+              unit = processUnit(parts[1]);
+              street = parts[2];
+            }
+
+            return [street, unit];
+          };
 
       if (this.collection.size() > 0) {
         data = this.collection.toJSON();
-        html = this.template({'places': this.collection});
+        html = this.template({
+          'nearest_place': this.collection.first(),
+          'nearby_places': _.sortBy(this.collection.first(10), placeOrdering),
+          'sorted_places': this.collection.sortBy(placeOrdering),
+          'places': this.collection
+        });
 
         this.$el.html(html);
         this.prettifyTimes();

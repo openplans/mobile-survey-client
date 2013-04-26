@@ -122,6 +122,11 @@ body {
   border-top: 0;
 }
 
+.place-list .label {
+  display: block;
+  text-align: center;
+}
+
 .address,
 .more-places {
   font-size: 18px;
