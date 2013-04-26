@@ -114,6 +114,8 @@ body {
   margin-top: -20px;
 }
 .place-list li {
+  margin-left: -20px;
+  margin-right: -20px;
   border-top: 1px solid #eee;
 }
 .place-list li:first-child {
@@ -182,6 +184,8 @@ a.address {
   z-index: 1029;
   background: #fff;
   padding: 20px;
+  padding-bottom: 0px;
+  margin-bottom: 0px;
 }
 
 #top-map {
