@@ -161,7 +161,7 @@ survey:
           name: num_of_employee
 
         - prompt: _(Opening Date)
-          type: date
+          type: month
           name: opening_date
 
         - prompt: _(Owner Place of Residence)
