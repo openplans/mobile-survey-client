@@ -149,7 +149,9 @@ var Surveyor = Surveyor || {};
     },
 
     onScroll: function() {
-      this.scrollTop = $(window).scrollTop();
+      if (this.$el.is(':visible')) {
+        this.scrollTop = $(window).scrollTop();
+      }
     },
 
     getScrollTop: function() {
