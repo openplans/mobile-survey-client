@@ -1,15 +1,15 @@
 <ul class="place-list unstyled">
-  <li class="label label-info">Nearest Place</li>
+  <li class="label">Nearest Place</li>
   {{#with nearest_place }}
     {{> place-item-tpl }}
   {{/with}}
 
-  <li class="label label-info">10 Nearest Places</li>
+  <li class="label">10 Nearest Places</li>
   {{#each nearby_places }}
     {{> place-item-tpl }}
   {{/each}}
 
-  <li class="label label-info">All Nearby Places</li>
+  <li class="label">All Nearby Places</li>
   {{#each sorted_places }}
     {{> place-item-tpl }}
   {{/each}}

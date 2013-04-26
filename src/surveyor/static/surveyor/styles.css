@@ -125,6 +125,8 @@ body {
 .place-list .label {
   display: block;
   text-align: center;
+  background: #47a;
+  border-radius: 0px;
 }
 
 .address,
