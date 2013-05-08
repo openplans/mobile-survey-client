@@ -17,8 +17,8 @@
 <div class="navbar navbar-inverse navbar-fixed-top" id="navbar-top">
   <div class="navbar-inner">
     <div class="container">
-      <a href="/" class="back-btn btn btn-navbar btn-navbar-left btn-full-icon">
-        <span class="icon-chevron-left icon-white"></span>
+      <a href="/" class="back-btn btn btn-navbar btn-navbar-right btn-full-icon">
+        <span class="icon-search icon-white"></span>
       </a>
 
       <a class="brand" href="/"><span class="logo-tripod"><span class="logo-theodolite"></span></span>Surveyor</a>
@@ -27,7 +27,6 @@
 </div><!--/.navbar-->
 
 <div class="container">
-  <div id="top-map"></div>
   <div id="content"></div>
 </div> <!-- /container -->
 {% endblock content %}
@@ -66,6 +65,7 @@
           };
 
       // Helper function
+      /*
       S.fetchNearbyPlaces = function(lat, lng) {
         // Fetch new data near this place
         S.placeCollection.fetch({
@@ -76,6 +76,7 @@
           }
         });
       };
+      */
 
       Handlebars.registerPartial('place-item-tpl', placeItemSource);
       Handlebars.registerPartial('form-field-tpl', formFieldSource);
@@ -112,29 +113,8 @@
         el: '#content'
       });
 
-      // Create the map view
-      S.mapView = new S.MapView({
-        el: '#top-map',
-        mapConfig: S.config.map,
-        collection: S.placeCollection
-      });
-
       S.navbarView = new S.NavbarView({
         el: '#navbar-top'
-      });
-
-      // The geolocation event
-      S.currentLocation = null;
-
-      S.mapView.on('locationfound', function(evt) {
-        S.currentLocation = evt;
-        S.fetchNearbyPlaces(evt.latlng.lat, evt.latlng.lng);
-      });
-
-      S.mapView.on('locationerror', function(evt) {
-        if (!S.currentLocation) {
-          S.fetchNearbyPlaces(S.config.map.options.center.lat, S.config.map.options.center.lng);
-        }
       });
 
       Backbone.history.start({pushState: true});

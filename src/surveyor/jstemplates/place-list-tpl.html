@@ -1,17 +1,4 @@
-<ul class="place-list unstyled">
-  <li class="label">Nearest Place</li>
-  {{#with nearest_place }}
-    {{> place-item-tpl }}
-  {{/with}}
+<div class="search-bar">
+  <input class="search-address">
+</div>
 
-  <li class="label">10 Nearest Places</li>
-  {{#each nearby_places }}
-    {{> place-item-tpl }}
-  {{/each}}
-
-  <li class="label">All Nearby Places</li>
-  {{#each sorted_places }}
-    {{> place-item-tpl }}
-  {{/each}}
-
-</ul>

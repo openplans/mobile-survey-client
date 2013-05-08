@@ -171,6 +171,10 @@ a.address {
   float: left;
 }
 
+.btn-navbar.btn-navbar-right {
+  float: right;
+}
+
 .btn-navbar.btn-full-icon {
   /* We're using full-size icons in here, to the
    * btn-navbar padding of 7px vertically is too

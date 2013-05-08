@@ -11,12 +11,10 @@ var Surveyor = Surveyor || {};
       ':placeId': 'placeForm'
     },
 
-    initPlaceCollection: function(locateOptions) {
-      if (S.currentLocation) {
-        S.fetchNearbyPlaces(S.currentLocation.latlng.lat, S.currentLocation.latlng.lng);
-      } else {
-        S.mapView.map.locate(locateOptions);
-      }
+    initPlaceCollection: function() {
+      S.placeCollection.fetch({
+          data: {include_submissions: true}
+      });
     },
 
     needsConfirmation: function() {
@@ -44,14 +42,9 @@ var Surveyor = Surveyor || {};
       // Init nearby places if we need them
       if (S.placeCollection.size() === 0) {
         this.initPlaceCollection({setView: true});
-      } else {
-        S.mapView.viewLayers.clearLayers();
-        if (S.currentLocation) {
-          S.mapView.map.fitBounds(S.currentLocation.bounds);
-        } else {
-          S.mapView.map.setView([S.config.map.options.center.lat, S.config.map.options.center.lng], S.config.map.options.zoom);
-        }
       }
+
+      S.beenToPlaceList = true;
     },
 
     placeForm: function(placeId) {
@@ -61,8 +54,7 @@ var Surveyor = Surveyor || {};
           createPlaceFormView = function(place) {
             S.placeFormViews[placeId] = placeFormView = new S.PlaceFormView({
               model: place,
-              template: S.placeFormTemplate,
-              layerGroup: S.mapView.viewLayers
+              template: S.placeFormTemplate
             });
             S.contentView.showView(placeFormView.render());
           };
@@ -109,7 +101,11 @@ var Surveyor = Surveyor || {};
 
     goBack: function(evt) {
       evt.preventDefault();
-      Backbone.history.history.back();
+      if (S.beenToPlaceList) {
+        Backbone.history.history.back();
+      } else {
+        S.router.navigate('/', {trigger: true});
+      }
     },
 
     navigate: function(evt) {
@@ -492,11 +488,6 @@ var Surveyor = Surveyor || {};
         html = this.template({place: placeData, survey: surveyData, survey_config: surveyConfig});
         this.$el.html(html);
         this.updateConditionalFields();
-
-        if (this.options.layerGroup) {
-          this.options.layerGroup.clearLayers();
-          this.layer = L.marker([placeData.location.lat, placeData.location.lng]).addTo(this.options.layerGroup);
-        }
       } else {
         // Show a spinner
         S.loadSpinner.spin(this.el);
@@ -515,86 +506,5 @@ var Surveyor = Surveyor || {};
       return this;
     }
   });
-
-  S.MapView = Backbone.View.extend({
-    events: {
-      'click .locate-me': 'handleGeolocateClick'
-    },
-    initialize: function() {
-      var self = this,
-          mapConfig = self.options.mapConfig,
-          baseLayer = L.tileLayer(mapConfig.base_layer.url, mapConfig.base_layer);
-
-      // Init the map
-      self.map = L.map(self.el, mapConfig.options);
-      self.map.addLayer(baseLayer);
-
-      // Init layer group for views
-      self.viewLayers = L.featureGroup().addTo(self.map);
-      self.viewLayers.on('layeradd', function(evt){
-        self.map.fitBounds(self.viewLayers.getBounds());
-      });
-
-      // Remove default prefix
-      self.map.attributionControl.setPrefix('');
-
-      // If not, init geolocation
-      if (mapConfig.geolocation_enabled) {
-        this.initGeolocation();
-      }
-    },
-
-    initGeolocation: function() {
-      var self = this;
-
-      this.locateControl = L.control.locate({
-        onLocationError: function() {}
-      }).addTo(this.map);
-      this.locateControl._active = true;
-
-      var onLocationError = function(evt) {
-        var mapOptions = self.options.mapConfig.options,
-            message;
-
-        switch (evt.code) {
-          // Unknown
-          case 0:
-            message = 'An unknown error occured while locating your position. Please try again.';
-            break;
-          // Permission Denied
-          case 1:
-            message = 'Geolocation is disabled for this page. Please adjust your browser settings.';
-            break;
-          // Position Unavailable
-          case 2:
-            message = 'Your location could not be determined. Please try again.';
-            break;
-          // Timeout
-          case 3:
-            message = 'It took too long to determine your location. Please try again.';
-            break;
-        }
-
-        self.trigger('locationerror', evt);
-        window.alert(message);
-      };
-
-      var onLocationFound = function(evt) {
-        self.trigger('locationfound', evt);
-      };
-
-      // Bind event handling
-      this.map.on('locationerror', onLocationError);
-      this.map.on('locationfound', onLocationFound);
-    },
-    handleGeolocateClick: function(evt) {
-      if (evt) {
-        evt.preventDefault();
-      }
-
-      this.map.locate();
-    }
-  });
-
 
 }(jQuery, Surveyor));
