@@ -49,6 +49,13 @@ var Surveyor = Surveyor || {};
 
     placeForm: function(placeId) {
       console.log('placeform', placeId);
+      var model = S.placeCollection.get(parseInt(placeId, 10)),
+          view = new S.SurveyListView({
+            el: '#survey-list-content',
+            template: S.surveyListTemplate,
+            model: model
+          }).render();
+
       // $('.back-btn').show();
 
       // var placeFormView, place,
@@ -115,6 +122,37 @@ var Surveyor = Surveyor || {};
   //   }
   // });
 
+  S.SurveyListView = Backbone.View.extend({
+    initialize: function() {
+      this.template = this.options.template;
+    },
+
+    render: function() {
+      var self = this,
+          html = this.template({
+            address: this.model.get('address'),
+            submissions: this.model.responseCollection.toJSON()
+          });
+
+      // Render the template
+      this.$el.html(html);
+
+      // Iterate over the surveys and render them
+      this.model.responseCollection.each(function(model, i, list) {
+        console.log(model.toJSON(), i);
+        var view = new S.PlaceFormView({
+          model: model,
+          template: S.placeFormTemplate,
+          placeModel: model
+        });
+
+        self.$('#survey-' + model.id + ' .accordion-inner').html(view.render().el);
+      });
+
+      return this;
+    }
+  });
+
   S.PlaceSearchView = Backbone.View.extend({
     initialize: function() {
       // Bind collection event listeners
@@ -138,8 +176,12 @@ var Surveyor = Surveyor || {};
         updater: function(item) {
           // Note that this assumes unique addresses!
           var model = self.collection.findWhere({'address': item});
-          console.log(model.toJSON());
-          S.router.navigate(model.id.toString(), {trigger: true});
+
+          if (model) {
+            S.router.navigate(model.id.toString(), {trigger: true});
+          } else {
+            window.alert('Oops, that\'s not a location we know about. Try again please.');
+          }
         }
       });
     }
@@ -279,6 +321,8 @@ var Surveyor = Surveyor || {};
     initialize: function() {
       this.template = this.options.template;
       this.model.on('change', this.render, this);
+
+      this.placeModel = this.options.placeModel;
     },
 
     events: {
@@ -434,13 +478,13 @@ var Surveyor = Surveyor || {};
 
     getSurvey: function() {
       if (!this.survey)
-        this.survey = this.model.responseCollection.first();
+        this.survey = this.model;
 
       return this.survey;
     },
 
     getPlace: function() {
-      return this.model;
+      return this.placeModel;
     },
 
     invalidInput: function() {
@@ -531,21 +575,16 @@ var Surveyor = Surveyor || {};
          surveyConfig,
          html;
 
-      if (this.model.has('location')) {
-        placeData = this.model.toJSON();
-        survey = this.model.responseCollection.first();
-        surveyData = (survey ? survey.toJSON() : {});
-        surveyConfig = S.config.survey;
+      placeData = this.placeModel.toJSON();
+      survey = this.model;
+      surveyData = (survey ? survey.toJSON() : {});
+      surveyConfig = S.config.survey;
 
-        this.initializeFieldSet(surveyConfig, surveyData);
+      this.initializeFieldSet(surveyConfig, surveyData);
 
-        html = this.template({place: placeData, survey: surveyData, survey_config: surveyConfig});
-        this.$el.html(html);
-        this.updateConditionalFields();
-      } else {
-        // Show a spinner
-        S.loadSpinner.spin(this.el);
-      }
+      html = this.template({place: placeData, survey: surveyData, survey_config: surveyConfig});
+      this.$el.html(html);
+      this.updateConditionalFields();
 
       this.$('.switch').bootstrapSwitch();
 

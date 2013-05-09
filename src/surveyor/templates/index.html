@@ -28,7 +28,8 @@
 
 <div class="container">
   <div id="content">
-    <div id="place-search-content">
+    <div id="place-search-content"></div>
+    <div id="survey-list-content"></div>
   </div>
 </div> <!-- /container -->
 {% endblock content %}
@@ -44,6 +45,7 @@
 
       // Initialise the templates
       var placeSearchSource = $('#place-search-tpl').html(),
+          surveyListSource = $('#survey-list-tpl').html(),
           placeFormSource = $('#place-form-tpl').html(),
           placeItemSource = $('#place-item-tpl').html(),
           formFieldSource = $('#form-field-tpl').html(),
@@ -69,6 +71,7 @@
       Handlebars.registerPartial('place-item-tpl', placeItemSource);
       Handlebars.registerPartial('form-field-tpl', formFieldSource);
       S.placeSearchTemplate = Handlebars.compile(placeSearchSource);
+      S.surveyListTemplate = Handlebars.compile(surveyListSource);
       S.placeFormTemplate = Handlebars.compile(placeFormSource);
 
       // Setup a shared spinner
@@ -97,7 +100,11 @@
 
       S.placeCollection.fetch({
         reset: true,
-        data: {include_submissions: true}
+        data: {include_submissions: true},
+        success: function() {
+          // Handle history after we get the places
+          Backbone.history.start({pushState: true});
+        }
       });
 
       // // Create the list view
@@ -116,7 +123,7 @@
       //   el: '#navbar-top'
       // });
 
-      Backbone.history.start({pushState: true});
+
     }(Surveyor));
   </script>
 {% endblock load_late %}
