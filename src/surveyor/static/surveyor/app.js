@@ -59,18 +59,28 @@ var Surveyor = Surveyor || {};
 
       // Iterate over the surveys and render them
       this.model.responseCollection.each(function(model, i, list) {
-        var view = new S.PlaceFormView({
-          model: model,
-          template: S.surveyFormTemplate,
-          placeModel: self.model
-        });
+        var view = self.makeSurveyFormView(model);
 
         self.formViews[i] = view;
-
         self.$('#survey-' + model.id + ' .accordion-inner').html(view.render().el);
       });
 
       return this;
+    },
+
+    makeSurveyFormView: function(surveyModel) {
+      return new S.SurveyFormView({
+        model: surveyModel,
+        template: S.surveyFormTemplate,
+        placeModel: this.model
+      });
+    },
+
+    appendNewSurveyFormView: function() {
+      var view = this.makeSurveyFormView();
+
+      this.formViews.push(view);
+      // TODO this.$('#survey-' + null + ' .accordion-inner').html(view.render().el);
     }
   });
 
@@ -109,7 +119,7 @@ var Surveyor = Surveyor || {};
   });
 
 
-  S.PlaceFormView = Backbone.View.extend({
+  S.SurveyFormView = Backbone.View.extend({
     initialize: function() {
       this.template = this.options.template;
       this.placeModel = this.options.placeModel;

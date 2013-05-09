@@ -1,15 +1,6 @@
 <div class="accordion" id="survey-list">
   <h3>{{address}}</h3>
-  {{#submissions}}
-  <div class="accordion-group">
-    <div class="accordion-heading">
-      <a class="accordion-toggle" data-toggle="collapse" data-parent="#survey-list" href="#survey-{{id}}">
-        {{business_name}}
-      </a>
-    </div>
-    <div id="survey-{{id}}" class="accordion-body collapse in">
-      <div class="accordion-inner"></div>
-    </div>
-  </div>
-  {{/submissions}}
+  {{#each submissions}}
+    {{> survey-item-tpl }}
+  {{/each}}
 </div>

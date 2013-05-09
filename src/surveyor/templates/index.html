@@ -46,6 +46,7 @@
       // Initialise the templates
       var placeSearchSource = $('#place-search-tpl').html(),
           surveyListSource = $('#survey-list-tpl').html(),
+          surveyItemSource = $('#survey-item-tpl').html(),
           surveyFormSource = $('#survey-form-tpl').html(),
           placeItemSource = $('#place-item-tpl').html(),
           formFieldSource = $('#form-field-tpl').html(),
@@ -69,6 +70,7 @@
           };
 
       Handlebars.registerPartial('place-item-tpl', placeItemSource);
+      Handlebars.registerPartial('survey-item-tpl', surveyItemSource);
       Handlebars.registerPartial('form-field-tpl', formFieldSource);
       S.placeSearchTemplate = Handlebars.compile(placeSearchSource);
       S.surveyListTemplate = Handlebars.compile(surveyListSource);
