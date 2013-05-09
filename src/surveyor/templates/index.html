@@ -46,7 +46,7 @@
       // Initialise the templates
       var placeSearchSource = $('#place-search-tpl').html(),
           surveyListSource = $('#survey-list-tpl').html(),
-          placeFormSource = $('#place-form-tpl').html(),
+          surveyFormSource = $('#survey-form-tpl').html(),
           placeItemSource = $('#place-item-tpl').html(),
           formFieldSource = $('#form-field-tpl').html(),
           spinnerOptions = {
@@ -72,7 +72,7 @@
       Handlebars.registerPartial('form-field-tpl', formFieldSource);
       S.placeSearchTemplate = Handlebars.compile(placeSearchSource);
       S.surveyListTemplate = Handlebars.compile(surveyListSource);
-      S.placeFormTemplate = Handlebars.compile(placeFormSource);
+      S.surveyFormTemplate = Handlebars.compile(surveyFormSource);
 
       // Setup a shared spinner
       S.loadSpinner = new Spinner(spinnerOptions);
@@ -106,24 +106,6 @@
           Backbone.history.start({pushState: true});
         }
       });
-
-      // // Create the list view
-      // S.placeListView = new S.PlaceListView({
-      //   collection: S.placeCollection,
-      //   template: S.placeListTemplate
-      // });
-      // S.placeFormViews = {};
-
-      // // Create the content managing view
-      // S.contentView = new S.ContentView({
-      //   el: '#content'
-      // });
-
-      // S.navbarView = new S.NavbarView({
-      //   el: '#navbar-top'
-      // });
-
-
     }(Surveyor));
   </script>
 {% endblock load_late %}

@@ -61,7 +61,7 @@ var Surveyor = Surveyor || {};
       this.model.responseCollection.each(function(model, i, list) {
         var view = new S.PlaceFormView({
           model: model,
-          template: S.placeFormTemplate,
+          template: S.surveyFormTemplate,
           placeModel: self.model
         });
 

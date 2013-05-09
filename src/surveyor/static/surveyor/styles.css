@@ -189,7 +189,7 @@ a.address {
 }
 
 .place-list,
-.place-form {
+.survey-form {
   position: relative;
   z-index: 1029;
   background: #fff;
