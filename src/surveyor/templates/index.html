@@ -27,7 +27,9 @@
 </div><!--/.navbar-->
 
 <div class="container">
-  <div id="content"></div>
+  <div id="content">
+    <div id="place-search-content">
+  </div>
 </div> <!-- /container -->
 {% endblock content %}
 
@@ -41,7 +43,7 @@
       S.config = {{ config|as_json }};
 
       // Initialise the templates
-      var placeListSource = $('#place-list-tpl').html(),
+      var placeSearchSource = $('#place-search-tpl').html(),
           placeFormSource = $('#place-form-tpl').html(),
           placeItemSource = $('#place-item-tpl').html(),
           formFieldSource = $('#form-field-tpl').html(),
@@ -64,23 +66,9 @@
             left: 'auto' // Left position relative to parent in px
           };
 
-      // Helper function
-      /*
-      S.fetchNearbyPlaces = function(lat, lng) {
-        // Fetch new data near this place
-        S.placeCollection.fetch({
-          data: {
-            include_submissions: true,
-            near: lat+','+lng,
-            limit: 100
-          }
-        });
-      };
-      */
-
       Handlebars.registerPartial('place-item-tpl', placeItemSource);
       Handlebars.registerPartial('form-field-tpl', formFieldSource);
-      S.placeListTemplate = Handlebars.compile(placeListSource);
+      S.placeSearchTemplate = Handlebars.compile(placeSearchSource);
       S.placeFormTemplate = Handlebars.compile(placeFormSource);
 
       // Setup a shared spinner
@@ -98,24 +86,35 @@
         }
       });
 
-      // Create the router
-      S.router = new S.Router({content: '#content'});
+      // // Create the router
+      S.router = new S.Router();
 
-      // Create the list view
-      S.placeListView = new S.PlaceListView({
+      S.placeSearchView = new S.PlaceSearchView({
+        el: '#place-search-content',
         collection: S.placeCollection,
-        template: S.placeListTemplate
-      });
-      S.placeFormViews = {};
-
-      // Create the content managing view
-      S.contentView = new S.ContentView({
-        el: '#content'
+        template: S.placeSearchTemplate
       });
 
-      S.navbarView = new S.NavbarView({
-        el: '#navbar-top'
+      S.placeCollection.fetch({
+        reset: true,
+        data: {include_submissions: true}
       });
+
+      // // Create the list view
+      // S.placeListView = new S.PlaceListView({
+      //   collection: S.placeCollection,
+      //   template: S.placeListTemplate
+      // });
+      // S.placeFormViews = {};
+
+      // // Create the content managing view
+      // S.contentView = new S.ContentView({
+      //   el: '#content'
+      // });
+
+      // S.navbarView = new S.NavbarView({
+      //   el: '#navbar-top'
+      // });
 
       Backbone.history.start({pushState: true});
     }(Surveyor));

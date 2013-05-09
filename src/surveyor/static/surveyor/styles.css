@@ -185,7 +185,6 @@ a.address {
 
 #content {
   background: #fff;
-  margin: 100px -20px 0;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
@@ -197,16 +196,6 @@ a.address {
   padding: 20px;
   padding-bottom: 0px;
   margin-bottom: 0px;
-}
-
-#top-map {
-  position: fixed;
-  height: 100px;
-  width: 100%;
-  margin-left: -20px;
-  margin-right: -20px;
-  margin-top: 0;
-  margin-bottom: 20px;
 }
 
 #mock-problems-note {
@@ -312,12 +301,6 @@ body.splash .navbar {
     margin-right: 20px;
     margin-left: 20px;
   }
-  #content {
-    margin-top: 200px;
-  }
-  #top-map {
-    height: 200px;
-  }
 }
 
 @media (max-width: 767px) {
@@ -338,11 +321,5 @@ body.splash .navbar {
     width: auto;
     margin-right: 20px;
     margin-left: 20px;
-  }
-  #content {
-    margin-top: 250px;
-  }
-  #top-map {
-    height: 250px;
   }
 }

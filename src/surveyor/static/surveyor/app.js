@@ -7,219 +7,273 @@ var Surveyor = Surveyor || {};
 
   S.Router = Backbone.Router.extend({
     routes : {
-      '':         'placeList',
-      ':placeId': 'placeForm'
+      // '':         'placeList',
+       ':placeId': 'placeForm'
     },
 
-    initPlaceCollection: function() {
-      S.placeCollection.fetch({
-          data: {include_submissions: true}
-      });
-    },
+    // initPlaceCollection: function() {
+    //   S.placeCollection.fetch({
+    //       data: {include_submissions: true}
+    //   });
+    // },
 
-    needsConfirmation: function() {
-      if (S.currentContentView && S.currentContentView.confirmLeave) {
-        return S.currentContentView.confirmLeave();
-      }
+    // needsConfirmation: function() {
+    //   if (S.currentContentView && S.currentContentView.confirmLeave) {
+    //     return S.currentContentView.confirmLeave();
+    //   }
 
-      return false;
-    },
+    //   return false;
+    // },
 
-    hideBackButton: function() {
-      $('.back-btn').hide();
-    },
+    // hideBackButton: function() {
+    //   $('.back-btn').hide();
+    // },
 
-    placeList: function() {
-      // If we need to confirm something before moving on, then do so. The
-      // confirmation method is responsible for restarting the routing.
-      if (this.needsConfirmation())
-        return;
+    // placeList: function() {
+    //   // If we need to confirm something before moving on, then do so. The
+    //   // confirmation method is responsible for restarting the routing.
+    //   if (this.needsConfirmation())
+    //     return;
 
-      this.hideBackButton();
+    //   this.hideBackButton();
 
-      S.contentView.showView(S.placeListView.render());
+    //   S.contentView.showView(S.placeListView.render());
 
-      // Init nearby places if we need them
-      if (S.placeCollection.size() === 0) {
-        this.initPlaceCollection({setView: true});
-      }
+    //   // Init nearby places if we need them
+    //   if (S.placeCollection.size() === 0) {
+    //     this.initPlaceCollection({setView: true});
+    //   }
 
-      S.beenToPlaceList = true;
-    },
+    //   S.beenToPlaceList = true;
+    // },
 
     placeForm: function(placeId) {
-      $('.back-btn').show();
+      console.log('placeform', placeId);
+      // $('.back-btn').show();
 
-      var placeFormView, place,
-          createPlaceFormView = function(place) {
-            S.placeFormViews[placeId] = placeFormView = new S.PlaceFormView({
-              model: place,
-              template: S.placeFormTemplate
-            });
-            S.contentView.showView(placeFormView.render());
-          };
+      // var placeFormView, place,
+      //     createPlaceFormView = function(place) {
+      //       S.placeFormViews[placeId] = placeFormView = new S.PlaceFormView({
+      //         model: place,
+      //         template: S.placeFormTemplate
+      //       });
+      //       S.contentView.showView(placeFormView.render());
+      //     };
 
-      // Init nearby places if we need them
-      if (S.placeCollection.size() === 0) {
-        this.initPlaceCollection();
-      }
+      // // Init nearby places if we need them
+      // if (S.placeCollection.size() === 0) {
+      //   this.initPlaceCollection();
+      // }
 
-      // If the place is loaded and we already have a view for it...
-      placeFormView = S.placeFormViews[placeId];
-      if (placeFormView) {
-        S.contentView.showView(placeFormView.render());
-        return;
-      }
+      // // If the place is loaded and we already have a view for it...
+      // placeFormView = S.placeFormViews[placeId];
+      // if (placeFormView) {
+      //   S.contentView.showView(placeFormView.render());
+      //   return;
+      // }
 
-      // If the place is loaded, but there's no view yet...
-      place = S.placeCollection.get(placeId);
-      if (place) {
-        createPlaceFormView(place);
-        return;
-      }
+      // // If the place is loaded, but there's no view yet...
+      // place = S.placeCollection.get(placeId);
+      // if (place) {
+      //   createPlaceFormView(place);
+      //   return;
+      // }
 
-      // If the place is not yet loaded...
-      S.placeCollection.add({id: placeId});
-      place = S.placeCollection.get(placeId);
+      // // If the place is not yet loaded...
+      // S.placeCollection.add({id: placeId});
+      // place = S.placeCollection.get(placeId);
 
-      // Render an empty place with a spinner, it will update on model change
-      createPlaceFormView(place);
+      // // Render an empty place with a spinner, it will update on model change
+      // createPlaceFormView(place);
 
-      place.fetch({
-        data: {
-          include_submissions: true
+      // place.fetch({
+      //   data: {
+      //     include_submissions: true
+      //   }
+      // });
+    }
+  });
+
+  // S.NavbarView = Backbone.View.extend({
+  //   events: {
+  //     'click .back-btn': 'goBack',
+  //     'click a:not(.back-btn)': 'navigate'
+  //   },
+
+  //   goBack: function(evt) {
+  //     evt.preventDefault();
+  //     if (S.beenToPlaceList) {
+  //       Backbone.history.history.back();
+  //     } else {
+  //       S.router.navigate('/', {trigger: true});
+  //     }
+  //   },
+
+  //   navigate: function(evt) {
+  //     evt.preventDefault();
+  //     S.router.navigate(evt.target.getAttribute('href'), {trigger: true});
+  //   }
+  // });
+
+  S.PlaceSearchView = Backbone.View.extend({
+    initialize: function() {
+      // Bind collection event listeners
+      this.collection.on('reset', this.render, this);
+
+      this.template = this.options.template;
+
+      S.loadSpinner.spin(this.el);
+    },
+
+    render: function() {
+      var self = this,
+          html = this.template(this.collection.toJSON());
+
+      // Render the template
+      this.$el.html(html);
+
+      // Init the typeahead plugin
+      this.$('input[type="text"]').typeahead({
+        source: self.collection.pluck('address'),
+        updater: function(item) {
+          // Note that this assumes unique addresses!
+          var model = self.collection.findWhere({'address': item});
+          console.log(model.toJSON());
+          S.router.navigate(model.id.toString(), {trigger: true});
         }
       });
     }
   });
 
-  S.NavbarView = Backbone.View.extend({
-    events: {
-      'click .back-btn': 'goBack',
-      'click a:not(.back-btn)': 'navigate'
-    },
+  // S.ContentView = Backbone.View.extend({
+  //   events: {
+  //     'click a': 'navigate'
+  //   },
 
-    goBack: function(evt) {
-      evt.preventDefault();
-      if (S.beenToPlaceList) {
-        Backbone.history.history.back();
-      } else {
-        S.router.navigate('/', {trigger: true});
-      }
-    },
+  //   initialize: function() {
+  //     // No collection or model events to listen for
 
-    navigate: function(evt) {
-      evt.preventDefault();
-      S.router.navigate(evt.target.getAttribute('href'), {trigger: true});
-    }
-  });
+  //     // Render me!
+  //     this.render();
 
-  S.ContentView = Backbone.View.extend({
-    events: {
-      'click a': 'navigate'
-    },
+  //     // Init child views
+  //     this.placeSearchView = new S.PlaceSearchView({
+  //       el: '#place-search-container',
+  //       collection: this.collection
+  //     });
 
-    showView: function(view) {
-      S.currentModel = view.model;
-      S.currentContentView = view;
+  //     // this.surveyListView = new S.SurveyListView({
+  //     //   el: '#place-search-container',
+  //     //   collection: this.collection
+  //     // });
 
-      view.delegateEvents();
-      this.$el.html(view.el);
-      $(window).scrollTop(view.getScrollTop());
-    },
+  //     // Init the place list. TODO: This is expensive!
+  //     this.collection.fetch({
+  //       data: {include_submissions: true}
+  //     });
+  //   },
 
-    navigate: function(evt) {
-      evt.preventDefault();
+  //   // showView: function(view) {
+  //   //   S.currentModel = view.model;
+  //   //   S.currentContentView = view;
 
-      // The event target may be a child of the anchor, so get the nearest
-      // anchor ancestor.
-      var $a = $(evt.target).closest('a');
-      S.router.navigate($a.attr('href'), {trigger: true});
-    }
-  });
+  //   //   view.delegateEvents();
+  //   //   this.$el.html(view.el);
+  //   //   $(window).scrollTop(view.getScrollTop());
+  //   // },
 
-  S.PlaceListView = Backbone.View.extend({
-    initialize: function() {
-      this.template = this.options.template;
-      this.collection.on('reset', this.render, this);
-      this.collection.on('sort', this.render, this);
-      this.scrollTop = 0;
+  //   navigate: function(evt) {
+  //     evt.preventDefault();
 
-      $(window).scroll(_.bind(this.onScroll, this));
-    },
+  //     // The event target may be a child of the anchor, so get the nearest
+  //     // anchor ancestor.
+  //     var $a = $(evt.target).closest('a');
+  //     S.router.navigate($a.attr('href'), {trigger: true});
+  //   }
+  // });
 
-    onScroll: function() {
-      if (this.$el.is(':visible')) {
-        this.scrollTop = $(window).scrollTop();
-      }
-    },
+  // S.PlaceListView = Backbone.View.extend({
+  //   initialize: function() {
+  //     this.template = this.options.template;
+  //     this.collection.on('reset', this.render, this);
+  //     this.collection.on('sort', this.render, this);
+  //     this.scrollTop = 0;
 
-    getScrollTop: function() {
-      return this.scrollTop;
-    },
+  //     $(window).scroll(_.bind(this.onScroll, this));
+  //   },
 
-    prettifyTimes: function() {
-      this.$('time').each(function(i, t) {
-        var $time = $(t),
-            datetime = new Date($time.text());
-        $time.html(moment(datetime).fromNow());
-      });
-    },
+  //   onScroll: function() {
+  //     if (this.$el.is(':visible')) {
+  //       this.scrollTop = $(window).scrollTop();
+  //     }
+  //   },
 
-    render: function() {
-      var data, html,
-          placeOrdering = function(place) {
-            // Return an array representation of a place's address for sorting
-            // purposes. The array will be of the form [street, unit]. A unit
-            // is assumed to begin with a digit.
-            var address = place.get('address'),
-                parts = /^(\d[^\s]*)\s+(.*)$/.exec(address),
-                unit, street,
-                processUnit = function(unitString) {
-                  var pattern = /^(\d+)([^\d]*)(.*)$/,
-                      subparts = pattern.exec(unitString),
-                      unitParts;
+  //   getScrollTop: function() {
+  //     return this.scrollTop;
+  //   },
 
-                  if (subparts === null) {
-                    unitParts = [unitString];
-                  } else {
-                    unitParts = [parseInt(subparts[1])];
-                    if (subparts[2]) unitParts.push(subparts[2]);
-                    if (subparts[3]) unitParts = unitParts.concat(placeOrdering(subparts[3]));
-                  }
+  //   prettifyTimes: function() {
+  //     this.$('time').each(function(i, t) {
+  //       var $time = $(t),
+  //           datetime = new Date($time.text());
+  //       $time.html(moment(datetime).fromNow());
+  //     });
+  //   },
 
-                  return unitParts;
-                };
+  //   render: function() {
+  //     var data, html,
+  //         placeOrdering = function(place) {
+  //           // Return an array representation of a place's address for sorting
+  //           // purposes. The array will be of the form [street, unit]. A unit
+  //           // is assumed to begin with a digit.
+  //           var address = place.get('address'),
+  //               parts = /^(\d[^\s]*)\s+(.*)$/.exec(address),
+  //               unit, street,
+  //               processUnit = function(unitString) {
+  //                 var pattern = /^(\d+)([^\d]*)(.*)$/,
+  //                     subparts = pattern.exec(unitString),
+  //                     unitParts;
 
-            if (parts === null) {
-              street = address;
-            } else {
-              unit = processUnit(parts[1]);
-              street = parts[2];
-            }
+  //                 if (subparts === null) {
+  //                   unitParts = [unitString];
+  //                 } else {
+  //                   unitParts = [parseInt(subparts[1])];
+  //                   if (subparts[2]) unitParts.push(subparts[2]);
+  //                   if (subparts[3]) unitParts = unitParts.concat(placeOrdering(subparts[3]));
+  //                 }
 
-            return [street, unit];
-          };
+  //                 return unitParts;
+  //               };
 
-      if (this.collection.size() > 0) {
-        data = this.collection.toJSON();
-        html = this.template({
-          'nearest_place': this.collection.first(),
-          'nearby_places': _.sortBy(this.collection.first(10), placeOrdering),
-          'sorted_places': this.collection.sortBy(placeOrdering),
-          'places': this.collection
-        });
+  //           if (parts === null) {
+  //             street = address;
+  //           } else {
+  //             unit = processUnit(parts[1]);
+  //             street = parts[2];
+  //           }
 
-        this.$el.html(html);
-        this.prettifyTimes();
-      } else {
-        // Show a spinner
-        S.loadSpinner.spin(this.el);
-      }
+  //           return [street, unit];
+  //         };
 
-      return this;
-    }
-  });
+  //     if (this.collection.size() > 0) {
+  //       data = this.collection.toJSON();
+  //       html = this.template({
+  //         'nearest_place': this.collection.first(),
+  //         'nearby_places': _.sortBy(this.collection.first(10), placeOrdering),
+  //         'sorted_places': this.collection.sortBy(placeOrdering),
+  //         'places': this.collection
+  //       });
+
+  //       this.$el.html(html);
+  //       this.prettifyTimes();
+  //     } else {
+  //       // Show a spinner
+  //       S.loadSpinner.spin(this.el);
+  //     }
+
+  //     return this;
+  //   }
+  // });
 
   S.PlaceFormView = Backbone.View.extend({
     initialize: function() {
