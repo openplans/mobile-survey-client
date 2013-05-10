@@ -11,17 +11,17 @@ var Surveyor = Surveyor || {};
     },
 
     needsConfirmation: function() {
-      var i, fv;
+      var i, fv, needsConf = false;
       if (S.currentListView) {
         for(i=0;i<S.currentListView.formViews.length; i++) {
           fv = S.currentListView.formViews[i];
           if (fv.confirmLeave) {
-            return fv.confirmLeave();
+            needsConf = fv.confirmLeave();
           }
         }
       }
 
-      return false;
+      return needsConf;
     },
 
     surveyList: function(placeId) {
@@ -32,22 +32,46 @@ var Surveyor = Surveyor || {};
       if (this.needsConfirmation())
         return;
 
+      if (S.currentListView) {
+        S.currentListView.remove();
+      }
+
       S.currentListView = new S.SurveyListView({
-        el: '#survey-list-content',
         template: S.surveyListTemplate,
         model: model
       }).render();
+
+      $('#survey-list-content').html(S.currentListView.el);
     }
   });
 
 
   S.SurveyListView = Backbone.View.extend({
+    events: {
+      'click .new-survey-btn': 'onNewSurveyBtnClick'
+    },
+
     initialize: function() {
+      var self = this;
+      this.model.responseCollection.on('add', this.appendNewSurveyFormView, this);
       this.template = this.options.template;
       this.formViews = [];
+
+      // Remove any unsaved models from the collection
+      this.model.responseCollection.each(function(model, i) {
+        if (model.isNew()) {
+          self.model.responseCollection.remove(model);
+        }
+      });
+
+      this.model.responseCollection.comparator = function(survey) {
+        return survey.get('business_name');
+      };
     },
 
     render: function() {
+      this.model.responseCollection.sort();
+
       var self = this,
           html = this.template({
             address: this.model.get('address'),
@@ -59,10 +83,7 @@ var Surveyor = Surveyor || {};
 
       // Iterate over the surveys and render them
       this.model.responseCollection.each(function(model, i, list) {
-        var view = self.makeSurveyFormView(model);
-
-        self.formViews[i] = view;
-        self.$('#survey-' + model.id + ' .accordion-inner').html(view.render().el);
+        self.appendNewSurveyFormView(model);
       });
 
       return this;
@@ -71,16 +92,31 @@ var Surveyor = Surveyor || {};
     makeSurveyFormView: function(surveyModel) {
       return new S.SurveyFormView({
         model: surveyModel,
-        template: S.surveyFormTemplate,
+        template: S.surveyItemTemplate,
         placeModel: this.model
       });
     },
 
-    appendNewSurveyFormView: function() {
-      var view = this.makeSurveyFormView();
+    appendNewSurveyFormView: function(surveyModel) {
+      var view = this.makeSurveyFormView(surveyModel);
 
       this.formViews.push(view);
-      // TODO this.$('#survey-' + null + ' .accordion-inner').html(view.render().el);
+      this.$('.accordion').append(view.render().el);
+    },
+
+    onNewSurveyBtnClick: function(evt) {
+      var hasNew = false;
+      this.model.responseCollection.each(function(model, i, list) {
+        if(model.isNew()) {
+          hasNew = true;
+        }
+      });
+
+      if (!hasNew) {
+        this.model.responseCollection.add({});
+      } else {
+        window.alert('You already have a new survey open. Please finish that one first.');
+      }
     }
   });
 
@@ -123,6 +159,12 @@ var Surveyor = Surveyor || {};
     initialize: function() {
       this.template = this.options.template;
       this.placeModel = this.options.placeModel;
+
+      this.model.on('change:business_name', this.onNameChange, this);
+
+      if(this.model.isNew()) {
+        this.isDirty = true;
+      }
     },
 
     events: {
@@ -144,12 +186,17 @@ var Surveyor = Surveyor || {};
       this.updateConditionalFields();
     },
 
+    onNameChange: function(model, value) {
+      console.log(model, value);
+      this.$('.accordion-toggle').text(value);
+    },
+
     confirmLeave: function() {
       if (this.isDirty) {
         // Store the path that we were going to, but change the path back to
         // the one for this form.
         this.nextPath = Backbone.history.location.pathname;
-        S.router.navigate('/' + this.model.id);
+        S.router.navigate('/' + this.placeModel.id);
 
         // Show the confirmation modal.
         this.$('.discard-confirmation').modal('show');
@@ -377,7 +424,8 @@ var Surveyor = Surveyor || {};
 
       placeData = this.placeModel.toJSON();
       survey = this.model;
-      surveyData = (survey ? survey.toJSON() : {});
+      surveyData = survey.toJSON();
+      surveyData.cid = survey.cid;
       surveyConfig = S.config.survey;
 
       this.initializeFieldSet(surveyConfig, surveyData);

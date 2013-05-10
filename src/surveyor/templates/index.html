@@ -70,11 +70,12 @@
           };
 
       Handlebars.registerPartial('place-item-tpl', placeItemSource);
-      Handlebars.registerPartial('survey-item-tpl', surveyItemSource);
+      Handlebars.registerPartial('survey-form-tpl', surveyFormSource);
       Handlebars.registerPartial('form-field-tpl', formFieldSource);
       S.placeSearchTemplate = Handlebars.compile(placeSearchSource);
       S.surveyListTemplate = Handlebars.compile(surveyListSource);
-      S.surveyFormTemplate = Handlebars.compile(surveyFormSource);
+      S.surveyItemTemplate = Handlebars.compile(surveyItemSource);
+      // S.surveyFormTemplate = Handlebars.compile(surveyFormSource);
 
       // Setup a shared spinner
       S.loadSpinner = new Spinner(spinnerOptions);

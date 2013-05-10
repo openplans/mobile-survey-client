@@ -1,0 +1,16 @@
+<div class="accordion-group">
+  <div class="accordion-heading">
+    <a class="accordion-toggle" data-toggle="collapse" data-parent="#survey-list" href="#survey-{{survey.cid}}">
+    {{#if survey.business_name}}
+      {{survey.business_name}}
+    {{else}}
+      New Business
+    {{/if}}
+    </a>
+  </div>
+  <div id="survey-{{survey.cid}}" class="accordion-body collapse">
+    <div class="accordion-inner">
+      {{> survey-form-tpl }}
+    </div>
+  </div>
+</div>
