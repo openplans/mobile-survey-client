@@ -161,6 +161,7 @@ var Surveyor = Surveyor || {};
       this.placeModel = this.options.placeModel;
 
       this.model.on('change:business_name', this.onNameChange, this);
+      this.model.on('change:needs_review', this.onReviewStatusChange, this);
 
       if(this.model.isNew()) {
         this.isDirty = true;
@@ -189,6 +190,14 @@ var Surveyor = Surveyor || {};
     onNameChange: function(model, value) {
       console.log(model, value);
       this.$('.accordion-toggle').text(value);
+    },
+    
+    onReviewStatusChange: function(model, value) {
+      if (value) {
+        this.$('.accordion-group').addClass('needs-review');
+      } else {
+        this.$('.accordion-group').removeClass('needs-review');
+      }
     },
 
     confirmLeave: function() {

@@ -186,6 +186,41 @@ body.splash .navbar {
   margin: 3px;
 }
 
+.needs-review {
+  border: 1px solid #b94a48;
+}
+
+.needs-review .accordion-heading {
+  position: relative;
+}
+
+.needs-review .accordion-toggle {
+  color: #b94a48;
+}
+
+.needs-review .accordion-toggle:hover,
+.needs-review .accordion-toggle:focus {
+  color: #b94a48;
+}
+
+.needs-review .accordion-inner {
+  border-top: 1px solid #b94a48;
+}
+
+.needs-review-badge {
+  display: none;
+}
+
+.needs-review .needs-review-badge {
+  display: block;
+  line-height: 35px;
+  padding-right: 10px;
+
+  position: absolute;
+  right: 0px;
+  top: 0px;
+}
+
 @media (min-width: 1200px) {
 }
 
