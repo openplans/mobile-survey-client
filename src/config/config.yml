@@ -210,3 +210,7 @@ survey:
           condition:
             - field: problems
               value: checked
+        
+        - prompt: _(Does this listing need review?)
+          type: switch
+          name: needs_review
