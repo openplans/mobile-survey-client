@@ -1,12 +1,22 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 
+docstring = """
+This script expects a CSV file with at least the following headers:
+
+    - address
+    - xcoord
+    - ycoord
+
+Any other columns will be uploaded as place data.
+"""
+
 import argparse
 import csv
 import shareabouts
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Upload address data to a Surveyor dataset')
+    parser = argparse.ArgumentParser(description='Upload address data to a Surveyor dataset. ' + docstring)
     parser.add_argument('csvfile', help='the name of the input file')
     parser.add_argument('dskey', help='the api key for the dataset')
     parser.add_argument('-d', '--dataset', help='the dataset slug', default='cb3-survey')
